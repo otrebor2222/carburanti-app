@@ -1,0 +1,10 @@
+{
+  "appId": "it.otrebor2222.carburanti",
+  "appName": "Prezzi Carburanti",
+  "webDir": "public",
+  "bundledWebRuntime": false,
+  "android": {
+    "allowMixedContent": true,
+    "backgroundColor": "#ffffff"
+  }
+}
