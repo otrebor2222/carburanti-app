@@ -5,12 +5,17 @@
   "bundledWebRuntime": false,
   "android": {
     "allowMixedContent": true,
-    "backgroundColor": "#ffffff",
-    "allowNavigation": ["https://carburanti-api.onrender.com","https://nominatim.openstreetmap.org","https://*.tile.openstreetmap.org"]
+    "backgroundColor": "#1565C0",
+    "allowNavigation": [
+      "https://carburanti-api.onrender.com",
+      "https://nominatim.openstreetmap.org",
+      "https://*.tile.openstreetmap.org",
+      "https://www.google.com"
+    ]
   },
   "plugins": {
     "Geolocation": {
-      "permissions": ["ACCESS_COARSE_LOCATION","ACCESS_FINE_LOCATION"]
+      "permissions": ["ACCESS_COARSE_LOCATION", "ACCESS_FINE_LOCATION"]
     }
   }
 }
