@@ -8,69 +8,69 @@
 <style>
 :root{
   --blu:#1565C0;--blu-bg:#E3F2FD;
-  --verde:#1B7E3B;--verde-bg:#E8F5E9;--verde-light:#43A85F;
-  --arancio:#D84315;--arancio-bg:#FBE9E7;
+  --verde:#1B7E3B;--verde-bg:#E8F5E9;
+  --arancio:#D84315;
   --rosso:#B71C1C;
   --grigio:#F4F4F4;--bordo:#E0E0E0;
   --testo:#1A1A1A;--muted:#6B6B6B;
-  --card:#FFFFFF;
 }
 *{box-sizing:border-box;margin:0;padding:0;-webkit-tap-highlight-color:transparent;}
 html,body{height:100%;font-family:-apple-system,BlinkMacSystemFont,'Segoe UI',sans-serif;background:var(--grigio);color:var(--testo);overflow:hidden;}
 .app{display:flex;flex-direction:column;height:100vh;}
 
-/* ── HEADER ── */
 .hdr{background:var(--blu);color:white;padding:12px 16px 8px;display:flex;flex-direction:column;gap:7px;flex-shrink:0;}
 .hdr-top{display:flex;align-items:center;gap:10px;}
-.hdr-title{flex:1;font-size:16px;font-weight:700;letter-spacing:-.2px;}
-.hdr-ts{font-size:10px;opacity:.7;white-space:nowrap;}
+.hdr-title{flex:1;font-size:16px;font-weight:700;}
+.hdr-ts{font-size:10px;opacity:.75;white-space:nowrap;}
 .search-row{display:flex;gap:8px;position:relative;}
 .sbox{flex:1;display:flex;align-items:center;background:rgba(255,255,255,.14);border:1px solid rgba(255,255,255,.28);border-radius:22px;padding:0 14px;gap:7px;}
 .sbox input{background:transparent;border:none;outline:none;color:white;font-size:14px;padding:8px 0;width:100%;}
 .sbox input::placeholder{color:rgba(255,255,255,.5);}
-.btn-geo{background:rgba(255,255,255,.18);border:1px solid rgba(255,255,255,.28);border-radius:22px;color:white;padding:8px 14px;font-size:13px;font-weight:600;cursor:pointer;white-space:nowrap;display:flex;align-items:center;gap:5px;}
-.btn-geo.attivo{background:rgba(105,240,174,.25);border-color:rgba(105,240,174,.5);}
-.suggerimenti{position:absolute;top:calc(100%+6px);left:0;right:70px;background:white;border-radius:12px;box-shadow:0 8px 28px rgba(0,0,0,.18);z-index:1000;display:none;overflow:hidden;}
-.sugg-item{padding:11px 14px;font-size:13px;color:var(--testo);cursor:pointer;border-bottom:1px solid var(--bordo);display:flex;align-items:center;gap:8px;}
+.btn-geo{background:rgba(255,255,255,.18);border:1px solid rgba(255,255,255,.28);border-radius:22px;color:white;padding:8px 14px;font-size:13px;font-weight:600;cursor:pointer;white-space:nowrap;}
+.btn-geo.on{background:rgba(105,240,174,.25);border-color:rgba(105,240,174,.5);}
+.suggerimenti{position:absolute;top:calc(100%+6px);left:0;right:72px;background:white;border-radius:12px;box-shadow:0 8px 28px rgba(0,0,0,.18);z-index:9999;display:none;overflow:hidden;}
+.sugg-item{padding:11px 14px;font-size:13px;color:var(--testo);cursor:pointer;border-bottom:1px solid var(--bordo);}
 .sugg-item:last-child{border-bottom:none;}
 .sugg-item:active{background:#f0f4ff;}
 
-/* ── FUEL TABS ── */
 .fuels{display:flex;overflow-x:auto;scrollbar-width:none;background:white;border-bottom:1px solid var(--bordo);flex-shrink:0;}
 .fuels::-webkit-scrollbar{display:none;}
-.ftab{padding:10px 14px;font-size:12px;font-weight:700;color:var(--muted);cursor:pointer;white-space:nowrap;border:none;border-bottom:3px solid transparent;background:none;flex-shrink:0;letter-spacing:.2px;}
+.ftab{padding:10px 14px;font-size:12px;font-weight:700;color:var(--muted);cursor:pointer;white-space:nowrap;border:none;border-bottom:3px solid transparent;background:none;flex-shrink:0;}
 .ftab.on{color:var(--blu);border-bottom-color:var(--blu);}
 
-/* ── STATS ── */
 .stats{display:grid;grid-template-columns:1fr 1fr 1fr;background:white;border-bottom:1px solid var(--bordo);flex-shrink:0;}
-.st{padding:8px 10px;text-align:center;border-right:1px solid var(--bordo);position:relative;}
+.st{padding:8px 6px;text-align:center;border-right:1px solid var(--bordo);}
 .st:last-child{border-right:none;}
-.st-l{font-size:9px;color:var(--muted);text-transform:uppercase;letter-spacing:.6px;margin-bottom:2px;}
-.st-v{font-size:18px;font-weight:800;line-height:1.1;}
+.st-l{font-size:9px;color:var(--muted);text-transform:uppercase;letter-spacing:.5px;margin-bottom:2px;}
+.st-v{font-size:17px;font-weight:800;line-height:1.1;}
 .st-v.g{color:var(--verde)}.st-v.a{color:var(--arancio)}.st-v.b{color:var(--blu)}
 .st-s{font-size:9px;color:var(--muted);margin-top:1px;overflow:hidden;text-overflow:ellipsis;white-space:nowrap;}
-.st-live{position:absolute;top:6px;right:8px;width:6px;height:6px;border-radius:50%;background:#43A85F;animation:blink 2s infinite;}
-@keyframes blink{0%,100%{opacity:1}50%{opacity:.2}}
 
-/* ── VIEW TABS ── */
 .vtabs{display:flex;background:white;border-bottom:1px solid var(--bordo);flex-shrink:0;}
 .vtab{flex:1;padding:9px;text-align:center;font-size:12px;font-weight:700;color:var(--muted);cursor:pointer;background:none;border:none;border-bottom:2px solid transparent;margin-bottom:-1px;display:flex;align-items:center;justify-content:center;gap:4px;}
 .vtab.on{color:var(--blu);border-bottom-color:var(--blu);}
 
-/* ── CONTENT ── */
-.content{flex:1;overflow:hidden;display:flex;flex-direction:column;min-height:0;}
+/* CONTENT — usa display:none invece di ricreare il DOM */
+.content{flex:1;overflow:hidden;display:flex;flex-direction:column;min-height:0;position:relative;}
 
-/* ── LISTA ── */
-.lista{flex:1;overflow-y:auto;-webkit-overflow-scrolling:touch;padding:8px;display:flex;flex-direction:column;gap:6px;}
-.card{background:var(--card);border-radius:14px;padding:12px 14px;box-shadow:0 1px 4px rgba(0,0,0,.07);cursor:pointer;border:1.5px solid transparent;}
+/* ── LISTA (pannello) ── */
+#pannello-lista{position:absolute;inset:0;overflow-y:auto;-webkit-overflow-scrolling:touch;padding:8px;display:flex;flex-direction:column;gap:6px;background:var(--grigio);}
+#pannello-lista.hidden{display:none;}
+
+/* ── MAPPA (pannello) — mai distrutta ── */
+#pannello-mappa{position:absolute;inset:0;background:#e8e0d8;}
+#pannello-mappa.hidden{display:none;}
+#map{width:100%;height:100%;}
+
+.card{background:white;border-radius:14px;padding:12px 14px;box-shadow:0 1px 4px rgba(0,0,0,.07);cursor:pointer;border:1.5px solid transparent;}
 .card:active{opacity:.75;}
 .card.top1{border-color:var(--verde);}
-.card.top1::before{content:'🏆 MIGLIOR PREZZO';display:block;background:var(--verde);color:white;font-size:10px;font-weight:700;text-align:center;padding:3px 0;border-radius:10px 10px 0 0;margin:-12px -14px 10px;}
-.card.sel{border-color:var(--blu);box-shadow:0 2px 10px rgba(21,101,192,.15);}
+.card.top1::before{content:'🏆 MIGLIOR PREZZO';display:block;background:var(--verde);color:white;font-size:10px;font-weight:700;text-align:center;padding:3px;border-radius:10px 10px 0 0;margin:-12px -14px 10px;}
+.card.sel{border-color:var(--blu);}
 .ctop{display:flex;align-items:center;justify-content:space-between;gap:10px;margin-bottom:7px;}
 .cinfo{flex:1;min-width:0;}
 .cgest{font-size:14px;font-weight:700;margin-bottom:2px;white-space:nowrap;overflow:hidden;text-overflow:ellipsis;}
-.caddr{font-size:11px;color:var(--muted);line-height:1.4;white-space:nowrap;overflow:hidden;text-overflow:ellipsis;}
+.caddr{font-size:11px;color:var(--muted);line-height:1.3;white-space:nowrap;overflow:hidden;text-overflow:ellipsis;}
 .cdist{font-size:11px;color:var(--blu);font-weight:600;margin-top:2px;}
 .cprice{text-align:right;flex-shrink:0;}
 .cnum{font-size:24px;font-weight:800;line-height:1;letter-spacing:-.5px;}
@@ -82,47 +82,36 @@ html,body{height:100%;font-family:-apple-system,BlinkMacSystemFont,'Segoe UI',sa
 .b-serv{background:#FFF8E1;color:#E65100;}
 .b-save{background:var(--verde-bg);color:var(--verde);margin-left:auto;}
 
-/* ── MAPPA ── */
-.map-wrap{flex:1;position:relative;overflow:hidden;}
-#map{width:100%;height:100%;}
-
-/* Popup Leaflet */
-.leaflet-popup-content-wrapper{border-radius:14px!important;padding:0!important;overflow:hidden;box-shadow:0 6px 24px rgba(0,0,0,.22)!important;border:none!important;}
+/* Popup mappa */
+.leaflet-popup-content-wrapper{border-radius:14px!important;padding:0!important;overflow:hidden;box-shadow:0 6px 24px rgba(0,0,0,.22)!important;}
 .leaflet-popup-content{margin:0!important;width:auto!important;}
 .pu{padding:14px 16px;min-width:190px;}
-.pu-top{display:flex;align-items:baseline;justify-content:space-between;margin-bottom:3px;}
-.pu-p{font-size:24px;font-weight:800;color:var(--verde);}
-.pu-f{font-size:10px;color:var(--muted);}
+.pu-p{font-size:24px;font-weight:800;color:var(--verde);line-height:1;}
+.pu-meta{font-size:10px;color:var(--muted);margin-bottom:6px;}
 .pu-n{font-size:14px;font-weight:700;margin-bottom:2px;}
 .pu-a{font-size:11px;color:var(--muted);line-height:1.4;margin-bottom:10px;}
-.pu-row{display:flex;gap:6px;margin-bottom:10px;}
-.pu-badge{font-size:10px;font-weight:700;padding:2px 8px;border-radius:10px;}
-.pu-btn{width:100%;background:var(--blu);color:white;border:none;border-radius:9px;padding:9px;font-size:13px;font-weight:700;cursor:pointer;letter-spacing:.2px;}
-.pu-save{font-size:10px;color:var(--verde);font-weight:700;background:var(--verde-bg);padding:2px 8px;border-radius:10px;}
+.pu-btn{width:100%;background:var(--blu);color:white;border:none;border-radius:9px;padding:9px;font-size:13px;font-weight:700;cursor:pointer;}
 
-/* Cluster badge sulla mappa */
-.mk-label{background:white;border:2px solid;border-radius:6px;padding:1px 4px;font-size:10px;font-weight:800;line-height:1.3;white-space:nowrap;box-shadow:0 2px 6px rgba(0,0,0,.22);}
+/* Label prezzo sui marker mappa */
+.mk{font-size:11px;font-weight:800;padding:2px 5px;border-radius:5px;border:2px solid;background:white;white-space:nowrap;box-shadow:0 2px 5px rgba(0,0,0,.2);}
+.mk::after{content:'';position:absolute;bottom:-6px;left:50%;transform:translateX(-50%);width:0;height:0;border-left:5px solid transparent;border-right:5px solid transparent;}
 
-/* ── LOADING ── */
 .loading{display:flex;flex-direction:column;align-items:center;justify-content:center;flex:1;gap:14px;padding:40px;text-align:center;}
 .spin{width:34px;height:34px;border:3px solid var(--bordo);border-top-color:var(--blu);border-radius:50%;animation:sp .7s linear infinite;}
 @keyframes sp{to{transform:rotate(360deg);}}
-.lt{font-size:15px;color:var(--testo);font-weight:700;}
+.lt{font-size:15px;font-weight:700;}
 .ls{font-size:12px;color:var(--muted);line-height:1.6;}
-.btn-r{background:var(--blu);color:white;border:none;border-radius:22px;padding:11px 28px;font-size:14px;font-weight:700;cursor:pointer;margin-top:4px;}
+.btn-r{background:var(--blu);color:white;border:none;border-radius:22px;padding:11px 28px;font-size:14px;font-weight:700;cursor:pointer;}
 
-/* ── TOAST ── */
-.toast{position:fixed;bottom:14px;left:50%;transform:translateX(-50%) translateY(80px);background:#1A1A1A;color:white;padding:9px 20px;border-radius:22px;font-size:13px;font-weight:500;z-index:9999;transition:transform .22s;pointer-events:none;box-shadow:0 4px 16px rgba(0,0,0,.3);max-width:92vw;text-align:center;}
+.toast{position:fixed;bottom:14px;left:50%;transform:translateX(-50%) translateY(80px);background:#1A1A1A;color:white;padding:9px 20px;border-radius:22px;font-size:13px;font-weight:500;z-index:99999;transition:transform .22s;pointer-events:none;box-shadow:0 4px 16px rgba(0,0,0,.3);max-width:92vw;text-align:center;}
 .toast.show{transform:translateX(-50%) translateY(0);}
 
-/* ── ERR ── */
 .errbar{background:#FFF3E0;border-bottom:1px solid #FFE0B2;padding:4px 14px;font-size:11px;color:#E65100;display:none;align-items:center;gap:5px;flex-shrink:0;}
 </style>
 </head>
 <body>
 <div class="app">
 
-  <!-- HEADER -->
   <div class="hdr">
     <div class="hdr-top">
       <span style="font-size:20px">⛽</span>
@@ -140,7 +129,6 @@ html,body{height:100%;font-family:-apple-system,BlinkMacSystemFont,'Segoe UI',sa
     </div>
   </div>
 
-  <!-- FUEL TABS -->
   <div class="fuels">
     <button class="ftab on" data-fuel="gasolio" onclick="setFuel(this)">🛢 DIESEL</button>
     <button class="ftab" data-fuel="benzina" onclick="setFuel(this)">⛽ BENZINA 95</button>
@@ -149,7 +137,6 @@ html,body{height:100%;font-family:-apple-system,BlinkMacSystemFont,'Segoe UI',sa
     <button class="ftab" data-fuel="metano" onclick="setFuel(this)">💨 METANO</button>
   </div>
 
-  <!-- STATS BAR -->
   <div class="stats">
     <div class="st">
       <div class="st-l">Minimo area</div>
@@ -160,16 +147,14 @@ html,body{height:100%;font-family:-apple-system,BlinkMacSystemFont,'Segoe UI',sa
       <div class="st-l">Media area</div>
       <div class="st-v a" id="savg">—</div>
       <div class="st-s" id="sfuel">Diesel</div>
-      <span class="st-live"></span>
     </div>
     <div class="st">
       <div class="st-l">Stazioni</div>
       <div class="st-v b" id="scnt">—</div>
-      <div class="st-s" id="sraggio">entro — km</div>
+      <div class="st-s" id="sraggio">—</div>
     </div>
   </div>
 
-  <!-- VIEW TABS -->
   <div class="vtabs">
     <button class="vtab on" id="vt-lista" onclick="setView('lista')">📋 Lista prezzi</button>
     <button class="vtab" id="vt-mappa" onclick="setView('mappa')">🗺️ Mappa</button>
@@ -177,14 +162,24 @@ html,body{height:100%;font-family:-apple-system,BlinkMacSystemFont,'Segoe UI',sa
 
   <div class="errbar" id="errbar">⚠️ <span id="err-txt"></span></div>
 
-  <div class="content" id="content">
-    <div class="loading">
-      <div class="spin"></div>
-      <div class="lt">Rilevamento posizione…</div>
-      <div class="ls">Cerco le stazioni più vicine a te</div>
-    </div>
-  </div>
+  <!-- CONTENT: i due pannelli coesistono, si alternano con display -->
+  <div class="content">
 
+    <!-- PANNELLO LISTA -->
+    <div id="pannello-lista">
+      <div class="loading">
+        <div class="spin"></div>
+        <div class="lt">Rilevamento posizione…</div>
+        <div class="ls">Cerco le stazioni più vicine</div>
+      </div>
+    </div>
+
+    <!-- PANNELLO MAPPA — inizializzata una volta sola, mai distrutta -->
+    <div id="pannello-mappa" class="hidden">
+      <div id="map"></div>
+    </div>
+
+  </div>
 </div>
 <div class="toast" id="toast"></div>
 
@@ -193,18 +188,39 @@ html,body{height:100%;font-family:-apple-system,BlinkMacSystemFont,'Segoe UI',sa
 /* ══ CONFIG ══════════════════════════════════════════ */
 const BACKEND   = 'https://carburanti-api.onrender.com';
 const NOMINATIM = 'https://nominatim.openstreetmap.org/search';
-const RAGGIO_DEFAULT = 10; // km
-const FNOMI = {gasolio:'Diesel',benzina:'Benzina 95',benzina98:'Benzina 98',gpl:'GPL',metano:'Metano'};
+const RAGGIO    = 10;
+const FNOMI     = {gasolio:'Diesel',benzina:'Benzina 95',benzina98:'Benzina 98',gpl:'GPL',metano:'Metano'};
 
 /* ══ STATO ═══════════════════════════════════════════ */
 let ALL=[], FILT=[];
 let fuel='gasolio';
-let uLat=null, uLng=null;  // posizione GPS reale
-let cLat=null, cLng=null;  // centro di ricerca
-let raggio=RAGGIO_DEFAULT;
+let uLat=null, uLng=null;
+let cLat=null, cLng=null, raggio=RAGGIO;
 let selId=null, view='lista';
+let tentativo=0;
+
+/* ══ MAPPA — inizializzata UNA VOLTA SOLA ════════════ */
 let mappa=null, mLayer=null, uMark=null;
-let tentativo=0, gpsOk=false;
+
+function initMappa(){
+  if(mappa) return; // già inizializzata
+  mappa = L.map('map',{
+    zoomControl:true,
+    preferCanvas:true,
+    renderer:L.canvas({padding:0.4}),
+    maxZoom:18,
+  }).setView([41.9,12.5],6);
+
+  L.tileLayer('https://{s}.tile.openstreetmap.org/{z}/{x}/{y}.png',{
+    attribution:'© <a href="https://openstreetmap.org">OpenStreetMap</a>',
+    maxZoom:18,
+    keepBuffer:2,
+    updateWhenIdle:false,
+    updateWhenZooming:false,
+  }).addTo(mappa);
+
+  mLayer = L.layerGroup().addTo(mappa);
+}
 
 /* ══ UTILS ═══════════════════════════════════════════ */
 const fp = p => p ? p.toFixed(3).replace('.',',') : '—';
@@ -227,87 +243,73 @@ function setErr(m){
   if(m){b.style.display='flex';document.getElementById('err-txt').textContent=m;}
   else b.style.display='none';
 }
-function setLoading(t,s){
-  document.getElementById('content').innerHTML=
-    `<div class="loading"><div class="spin"></div><div class="lt">${t}</div><div class="ls">${s||''}</div></div>`;
-}
 
-/* ══ GPS — RICHIESTA IMMEDIATA ALL'AVVIO ═════════════ */
-function avviaGPS(){
-  if(!navigator.geolocation){
-    // GPS non disponibile: carica senza posizione
-    carica();
-    return;
+/* ══ FILTRO CARBURANTE — robusto sui nomi MIMIT ══════ */
+// I nomi reali nel CSV MIMIT sono es: "Benzina", "Gasolio", "Gasolio speciale",
+// "Benzina speciale", "GPL", "Metano CNG", ecc.
+function matchFuel(carburante, fuel){
+  const c = (carburante||'').toLowerCase().trim();
+  if(c==='') return false;
+  switch(fuel){
+    case 'gasolio':
+      // Solo gasolio base, non speciale, non riscaldamento
+      return (c==='gasolio' || c.includes('diesel')) &&
+             !c.includes('spec') && !c.includes('riscald') && !c.includes('blue');
+    case 'benzina':
+      // Solo benzina base (95), non 98, non speciale/premium
+      return (c==='benzina' || c==='benzina 95') &&
+             !c.includes('98') && !c.includes('spec') && !c.includes('premium') && !c.includes('super');
+    case 'benzina98':
+      return c.includes('98') || c.includes('premium') || c.includes('super') ||
+             c==='benzina speciale' || c.includes('v-power') || c.includes('ultimate');
+    case 'gpl':
+      return c==='gpl' || c.includes('gpl') || c.includes('liquefatt') || c.includes('autogas');
+    case 'metano':
+      return c==='metano' || c.includes('metano') || c.includes('cng') || c.includes('gnc');
+    default:
+      return true;
   }
-
-  // Richiede immediatamente il permesso GPS all'apertura
-  navigator.geolocation.getCurrentPosition(
-    pos => {
-      uLat = pos.coords.latitude;
-      uLng = pos.coords.longitude;
-      cLat = uLat; cLng = uLng;
-      raggio = RAGGIO_DEFAULT;
-      gpsOk = true;
-      document.getElementById('btn-geo').classList.add('attivo');
-      document.getElementById('btn-geo').textContent = '📍 ' + raggio + 'km';
-      carica();
-    },
-    err => {
-      // GPS negato o non disponibile: carica comunque senza posizione
-      console.warn('GPS:', err.code, err.message);
-      if(err.code === 1){
-        setErr('Permesso GPS negato — attiva la posizione nelle impostazioni oppure cerca una città');
-      }
-      carica();
-    },
-    { enableHighAccuracy:true, timeout:8000, maximumAge:60000 }
-  );
-}
-
-function geoLocate(){
-  if(!navigator.geolocation){ toast('⚠️ GPS non disponibile'); return; }
-  toast('📍 Rilevamento GPS…', 6000);
-  navigator.geolocation.getCurrentPosition(
-    pos => {
-      uLat=pos.coords.latitude; uLng=pos.coords.longitude;
-      cLat=uLat; cLng=uLng; raggio=RAGGIO_DEFAULT;
-      gpsOk=true;
-      document.getElementById('btn-geo').classList.add('attivo');
-      document.getElementById('btn-geo').textContent='📍 '+raggio+'km';
-      document.getElementById('sinp').value='';
-      toast('✅ Posizione trovata!');
-      if(mappa && view==='mappa') mappa.setView([uLat,uLng],13);
-      tentativo=0; carica();
-    },
-    err => {
-      if(err.code===1) toast('⚠️ GPS negato — vai in Impostazioni → App → Carburanti → Permessi → Posizione', 5000);
-      else if(err.code===2) toast('⚠️ GPS non disponibile — attiva la posizione del telefono', 4000);
-      else toast('⚠️ GPS lento — riprova tra qualche secondo');
-    },
-    { enableHighAccuracy:true, timeout:12000, maximumAge:30000 }
-  );
 }
 
 /* ══ CARICA DAL BACKEND ══════════════════════════════ */
 async function carica(){
   tentativo++;
-  if(tentativo===1) setLoading('Caricamento prezzi…', cLat ? 'Stazioni entro '+raggio+' km' : 'Dati MIMIT aggiornati');
+
+  // Mostra loading solo al primo tentativo nella lista
+  if(tentativo===1 && view==='lista'){
+    document.getElementById('pannello-lista').innerHTML=
+      `<div class="loading"><div class="spin"></div>
+       <div class="lt">Caricamento prezzi…</div>
+       <div class="ls">${cLat?'Stazioni entro '+raggio+' km da te':'Dati MIMIT aggiornati oggi'}</div></div>`;
+  }
 
   try{
-    const params = new URLSearchParams({ carburante: fuel, limit: 300 });
+    const p = new URLSearchParams({ limit:400 });
+    // Manda SEMPRE il carburante al server per pre-filtrare
+    // Usiamo le chiavi che il server MIMIT riconosce
+    const fuelServer = {
+      gasolio:'Gasolio', benzina:'Benzina', benzina98:'Benzina',
+      gpl:'GPL', metano:'Metano'
+    }[fuel] || fuel;
+    p.set('carburante', fuelServer);
+
     if(cLat && cLng){
-      params.set('lat',  cLat.toFixed(6));
-      params.set('lng',  cLng.toFixed(6));
-      params.set('raggio', raggio);
+      p.set('lat', cLat.toFixed(6));
+      p.set('lng', cLng.toFixed(6));
+      p.set('raggio', raggio);
     }
 
-    const res = await fetch(`${BACKEND}/api/stazioni-con-prezzi?${params}`,
-      { signal: AbortSignal.timeout(30000) });
+    const res = await fetch(`${BACKEND}/api/stazioni-con-prezzi?${p}`,
+      {signal:AbortSignal.timeout(30000)});
 
     if(res.status===503){
-      const j=await res.json();
-      setLoading('Server in avvio…', `Tentativo ${tentativo}/4 — riprovo tra 25s`);
-      if(tentativo<4) setTimeout(carica,25000); else usaCampione();
+      if(tentativo<4){
+        if(view==='lista') document.getElementById('pannello-lista').innerHTML=
+          `<div class="loading"><div class="spin"></div>
+           <div class="lt">Server in avvio…</div>
+           <div class="ls">Tentativo ${tentativo}/4 — attendo 25 secondi</div></div>`;
+        setTimeout(carica,25000);
+      }else usaCampione();
       return;
     }
     if(!res.ok) throw new Error('HTTP '+res.status);
@@ -317,7 +319,7 @@ async function carica(){
     ALL = j.data.map((s,i)=>({
       id:    s.id||i,
       prezzo: parseFloat(s.prezzo)||0,
-      carburante: (s.carburante||'').toLowerCase(),
+      carburante: (s.carburante||'').trim(),
       self:  s.isSelf||false,
       dtCom: (s.dtCom||'').split(' ')[0]||'',
       gestore:   s.gestore||'—',
@@ -326,11 +328,10 @@ async function carica(){
       lat: parseFloat(s.latitudine)||0,
       lng: parseFloat(s.longitudine)||0,
       dist: s.distanza!=null ? parseFloat(s.distanza) : null,
-    })).filter(s=>s.prezzo>0.1&&s.prezzo<6);
+    })).filter(s=>s.prezzo>0.1 && s.prezzo<6);
 
     tentativo=0; setErr('');
 
-    // Badge timestamp
     if(j.aggiornatoAlle){
       const d=new Date(j.aggiornatoAlle);
       document.getElementById('hdr-ts').textContent =
@@ -339,8 +340,9 @@ async function carica(){
     }
 
     applicaFiltri();
+
   }catch(e){
-    console.warn('Tentativo',tentativo,e.message);
+    console.warn('Errore carica tentativo',tentativo,e.message);
     if(tentativo<3) setTimeout(carica,20000);
     else { setErr('Server non raggiungibile — dati dimostrativi'); usaCampione(); }
   }
@@ -349,91 +351,117 @@ async function carica(){
 /* ══ CAMPIONE ════════════════════════════════════════ */
 function usaCampione(){
   const PP={
-    gasolio:  [1.849,1.869,1.894,1.919,1.939,1.959,1.979,1.999,2.049,2.099,2.149,2.269],
-    benzina:  [1.749,1.789,1.819,1.849,1.879,1.919,1.969,2.009,2.069,2.179],
-    benzina98:[1.889,1.949,1.989,2.049,2.099,2.159,2.269],
+    gasolio:  [1.849,1.869,1.894,1.919,1.939,1.959,1.979,1.999,2.049,2.099],
+    benzina:  [1.749,1.789,1.819,1.849,1.879,1.919,1.969,2.009,2.069],
+    benzina98:[1.889,1.949,1.989,2.049,2.099,2.159],
     gpl:      [0.689,0.719,0.749,0.769,0.789],
     metano:   [1.199,1.259,1.319,1.369],
   };
+  const carbLabel={gasolio:'Gasolio',benzina:'Benzina',benzina98:'Benzina 98',gpl:'GPL',metano:'Metano'};
   const G=['ENI','Q8','IP','Shell','Tamoil','TotalEnergies','Esso','API-IP','Kuwait','Agip'];
-  const base={la:cLat||41.9,lo:cLng||12.5};
   const V=['Via Roma','Corso Italia','Via Appia','Viale Europa','Via Po','Via Nazionale'];
   const pp=PP[fuel]||PP.gasolio;
+  const bLa=cLat||41.9, bLo=cLng||12.5;
   ALL=[];
   for(let i=0;i<60;i++){
-    const la=base.la+(Math.random()-.5)*.15, lo=base.lo+(Math.random()-.5)*.18;
-    const dist=(cLat&&cLng)?hav(cLat,cLng,la,lo):Math.random()*10;
-    ALL.push({id:i,prezzo:pp[i%pp.length],carburante:fuel,self:i%3!==0,dtCom:'12/04/2026',
-      gestore:G[i%G.length],indirizzo:V[i%V.length]+' '+(i*7+1),comune:'Area',
-      lat:la,lng:lo,dist});
+    const la=bLa+(Math.random()-.5)*.1, lo=bLo+(Math.random()-.5)*.12;
+    ALL.push({
+      id:i, prezzo:pp[i%pp.length],
+      carburante:carbLabel[fuel]||fuel,
+      self:i%3!==0, dtCom:'12/04/2026',
+      gestore:G[i%G.length],
+      indirizzo:V[i%V.length]+' '+(i*7+1),
+      comune:'Area', lat:la, lng:lo,
+      dist:hav(bLa,bLo,la,lo),
+    });
   }
   applicaFiltri();
 }
 
 /* ══ FILTRI ══════════════════════════════════════════ */
 function applicaFiltri(){
-  let f=ALL.filter(s=>{
-    const c=s.carburante;
-    if(fuel==='gasolio')   return c.includes('gasolio')&&!c.includes('riscald')&&!c.includes('spec');
-    if(fuel==='benzina')   return c.includes('benzina')&&!c.includes('98')&&!c.includes('spec')&&!c.includes('premium');
-    if(fuel==='benzina98') return c.includes('98')||c.includes('premium');
-    if(fuel==='gpl')       return c.includes('gpl')||c.includes('liquefatt');
-    if(fuel==='metano')    return c.includes('metano')||c.includes('cng');
-    return true;
-  });
-  if(f.length<3) f=[...ALL];
+  // Filtra per carburante con matching robusto
+  let f = ALL.filter(s => matchFuel(s.carburante, fuel));
 
-  // Ricalcola distanze precise lato client e filtra per raggio
+  // Se il filtro non trova nulla (nomi MIMIT inattesi) usa tutti i dati
+  if(f.length < 3){
+    console.warn('matchFuel ha trovato troppo pochi risultati, uso tutti i dati');
+    f = [...ALL];
+  }
+
+  // Ricalcola distanze lato client (più precise del server)
   if(cLat && cLng){
-    f = f.map(s=>({...s, dist:(s.lat&&s.lng)?hav(cLat,cLng,s.lat,s.lng):null}))
-         .filter(s=>s.dist===null||s.dist<=raggio);
-    // Se troppo poche allarga automaticamente
-    if(f.length<3){
-      const r2=raggio*4;
-      f=ALL.filter(s=>{if(!s.lat||!s.lng)return false;const d=hav(cLat,cLng,s.lat,s.lng);s.dist=d;return d<=r2;});
-      if(f.length>0) setErr(`Poche stazioni entro ${raggio}km — mostro stazioni entro ${r2}km`);
+    f = f.map(s=>({
+      ...s,
+      dist: (s.lat && s.lng) ? hav(cLat,cLng,s.lat,s.lng) : null
+    })).filter(s => s.dist===null || s.dist<=raggio);
+
+    // Se troppo poche stazioni nel raggio, allarga automaticamente
+    if(f.length < 3){
+      const r2 = raggio * 4;
+      f = ALL.filter(s=>{
+        if(!s.lat||!s.lng) return false;
+        const d = hav(cLat,cLng,s.lat,s.lng);
+        s.dist = d;
+        return d <= r2;
+      }).filter(s => matchFuel(s.carburante, fuel)||true);
+      if(f.length>0) setErr(`Poche stazioni entro ${raggio}km — mostro entro ${r2}km`);
+      else setErr('Nessuna stazione trovata in zona');
     }
+
     f.sort((a,b)=>(a.dist??999)-(b.dist??999));
-  }else{
+  } else {
     f.sort((a,b)=>a.prezzo-b.prezzo);
   }
 
-  FILT=f;
+  FILT = f;
   aggStats();
-  if(view==='lista') renderLista(); else aggMarkers();
+
+  if(view==='lista') renderLista();
+  else aggMarkers();
 }
 
-/* ══ STATS — PREZZI REALI ════════════════════════════ */
+/* ══ STATS ═══════════════════════════════════════════ */
 function aggStats(){
-  const pp=FILT.map(s=>s.prezzo).filter(p=>p>0);
+  const pp = FILT.map(s=>s.prezzo).filter(p=>p>0);
   if(!pp.length) return;
   const mn=Math.min(...pp), mx=Math.max(...pp), av=pp.reduce((a,b)=>a+b,0)/pp.length;
-
-  document.getElementById('smin').textContent='€'+fp(mn);
-  document.getElementById('savg').textContent='€'+fp(av);
-  document.getElementById('scnt').textContent=FILT.length;
-  document.getElementById('smin-w').textContent=(FILT[0]?.gestore||'—').substring(0,12);
-  document.getElementById('sfuel').textContent=FNOMI[fuel]||fuel;
-  document.getElementById('sraggio').textContent='entro '+(raggio||'?')+' km';
+  document.getElementById('smin').textContent = '€'+fp(mn);
+  document.getElementById('savg').textContent = '€'+fp(av);
+  document.getElementById('scnt').textContent = FILT.length;
+  document.getElementById('smin-w').textContent = (FILT.find(s=>s.prezzo===mn)?.gestore||'—').substring(0,12);
+  document.getElementById('sfuel').textContent  = FNOMI[fuel]||fuel;
+  document.getElementById('sraggio').textContent = cLat ? 'entro '+raggio+' km' : 'tutta Italia';
 }
 
 /* ══ LISTA ═══════════════════════════════════════════ */
 function renderLista(){
+  const pl = document.getElementById('pannello-lista');
   if(!FILT.length){
-    document.getElementById('content').innerHTML=
-      '<div class="loading"><div class="lt">Nessuna stazione trovata</div><div class="ls">Prova a cercare una città o allarga il raggio</div><button class="btn-r" onclick="tentativo=0;raggio=50;carica()">Allarga a 50 km</button></div>';
+    pl.innerHTML=`<div class="loading">
+      <div class="lt">Nessuna stazione trovata</div>
+      <div class="ls">Prova a cercare una città o allarga il raggio</div>
+      <button class="btn-r" onclick="raggio=50;applicaFiltri()">Allarga a 50 km</button>
+    </div>`;
     return;
   }
-  const mn=Math.min(...FILT.map(s=>s.prezzo));
-  const mx=Math.max(...FILT.map(s=>s.prezzo));
-  const frag=document.createDocumentFragment();
-  const wrap=document.createElement('div');
-  wrap.className='lista';
 
-  FILT.slice(0,80).forEach((s,i)=>{
-    const c=colC(s.prezzo,mn,mx), top=i===0, sel=selId===s.id;
-    const risp=((mx-s.prezzo)*40).toFixed(2);
-    const div=document.createElement('div');
+  // Ordina per prezzo per trovare il vero minimo
+  const perPrezzo = [...FILT].sort((a,b)=>a.prezzo-b.prezzo);
+  const mn = perPrezzo[0].prezzo;
+  const mx = perPrezzo[perPrezzo.length-1].prezzo;
+
+  // Visualizza nell'ordine originale (distanza o prezzo)
+  const lista = [...FILT];
+  const minId = FILT.find(s=>s.prezzo===mn)?.id;
+
+  const frag = document.createDocumentFragment();
+  lista.slice(0,80).forEach((s,i)=>{
+    const c   = colC(s.prezzo,mn,mx);
+    const top = s.id === minId; // MIGLIOR PREZZO = prezzo più basso assoluto
+    const sel = selId === s.id;
+    const risp = ((mx-s.prezzo)*40).toFixed(2);
+    const div = document.createElement('div');
     div.className='card'+(top?' top1':'')+(sel?' sel':'');
     div.innerHTML=
       `<div class="ctop">
@@ -453,120 +481,180 @@ function renderLista(){
         ${!top&&parseFloat(risp)>0.05?`<span class="badge b-save">Risparmi €${risp}/40L</span>`:''}
         ${top?`<span class="badge b-save">Risparmio max €${((mx-mn)*40).toFixed(2)}/40L</span>`:''}
       </div>`;
-    div.addEventListener('click',()=>selCard(i));
-    wrap.appendChild(div);
+    div.addEventListener('click',()=>selCard(s.id));
+    frag.appendChild(div);
   });
-  frag.appendChild(wrap);
-  const c=document.getElementById('content');
-  c.innerHTML='';
-  c.appendChild(frag);
+
+  pl.innerHTML='';
+  pl.appendChild(frag);
 }
 
-/* ══ MAPPA VELOCE CON PREZZI ═════════════════════════ */
-function renderMappa(){
-  document.getElementById('content').innerHTML='<div class="map-wrap"><div id="map"></div></div>';
-  const la=cLat||uLat||41.9, lo=cLng||uLng||12.5;
-  const z=(cLat||uLat)?13:6;
-
-  if(!mappa){
-    mappa=L.map('map',{
-      zoomControl:true,
-      preferCanvas:true,          // canvas renderer = molto più veloce
-      renderer:L.canvas({padding:0.5}),
-      zoomSnap:1,
-      maxZoom:18,
-    }).setView([la,lo],z);
-
-    L.tileLayer('https://{s}.tile.openstreetmap.org/{z}/{x}/{y}.png',{
-      attribution:'© OSM',
-      maxZoom:18,
-      keepBuffer:2,
-      updateWhenIdle:false,
-      updateWhenZooming:false,
-      crossOrigin:true,
-    }).addTo(mappa);
-
-    mLayer=L.layerGroup().addTo(mappa);
-  }else{
-    mappa.setView([la,lo],z);
-    setTimeout(()=>mappa.invalidateSize(),50);
-  }
-  aggMarkers();
-}
-
+/* ══ MARKERS MAPPA ═══════════════════════════════════ */
 function aggMarkers(){
-  if(!mLayer) return;
+  if(!mappa || !mLayer) return;
   mLayer.clearLayers();
 
-  // Marker GPS utente
-  if(uLat&&uLng){
+  // Marker posizione utente
+  if(uLat && uLng){
     if(uMark) try{mappa.removeLayer(uMark);}catch(e){}
-    uMark=L.circleMarker([uLat,uLng],{
-      radius:10, color:'white', fillColor:'#1565C0', fillOpacity:1, weight:3,
+    uMark = L.circleMarker([uLat,uLng],{
+      radius:9,color:'white',fillColor:'#1565C0',fillOpacity:1,weight:3
     }).addTo(mappa).bindPopup('<b>📍 La tua posizione</b>');
   }
 
-  const vis=FILT.filter(s=>s.lat&&s.lng&&Math.abs(s.lat)>0.5);
+  const vis = FILT.filter(s=>s.lat&&s.lng&&Math.abs(s.lat)>0.5);
   if(!vis.length) return;
 
-  const mn=Math.min(...vis.map(s=>s.prezzo));
-  const mx=Math.max(...vis.map(s=>s.prezzo));
+  const mn = Math.min(...vis.map(s=>s.prezzo));
+  const mx = Math.max(...vis.map(s=>s.prezzo));
 
-  // Usa DivIcon con etichetta prezzo — max 150 per fluidità
+  // Max 150 marker per fluidità
   vis.slice(0,150).forEach(s=>{
-    const c=colH(s.prezzo,mn,mx);
-    const sel=selId===s.id;
-    const sz=sel?16:12;
+    const c   = colH(s.prezzo,mn,mx);
+    const sel = selId===s.id;
 
-    // Label prezzo direttamente sulla mappa
-    const ico=L.divIcon({
+    const ico = L.divIcon({
       className:'',
-      html:`<div class="mk-label" style="border-color:${c};color:${c};font-size:${sz}px;${sel?'transform:scale(1.2);z-index:999;':''}">€${fp(s.prezzo)}</div>`,
-      iconAnchor:[22,10],
-      iconSize:[44,20],
+      html:`<div class="mk" style="border-color:${c};color:${c};${sel?'transform:scale(1.3);z-index:1000;font-size:13px;':''}">€${fp(s.prezzo)}</div>`,
+      iconSize:[50,22],
+      iconAnchor:[25,22],
     });
 
     L.marker([s.lat,s.lng],{icon:ico,zIndexOffset:sel?1000:0})
       .addTo(mLayer)
       .bindPopup(
         `<div class="pu">
-          <div class="pu-top">
-            <span class="pu-p">€${fp(s.prezzo)}</span>
-            <span class="pu-save">${s.dist!=null?s.dist.toFixed(1)+' km':''}</span>
-          </div>
-          <div class="pu-f">${FNOMI[fuel]||fuel} · ${s.self?'Self-service':'Servito'}</div>
+          <div class="pu-p">€${fp(s.prezzo)}</div>
+          <div class="pu-meta">${FNOMI[fuel]||fuel}/L · ${s.self?'Self-service':'Servito'}${s.dist!=null?' · '+s.dist.toFixed(1)+' km':''}</div>
           <div class="pu-n">${s.gestore}</div>
           <div class="pu-a">${s.indirizzo}</div>
-          <div class="pu-row">
-            <span class="pu-badge ${s.self?'b-self':'b-serv'}">${s.self?'Self':'Servito'}</span>
-            ${s.dtCom?`<span class="pu-badge" style="background:var(--grigio);color:var(--muted)">${s.dtCom}</span>`:''}
-          </div>
-          <button class="pu-btn" onclick="window.__s(${FILT.indexOf(s)})">↗ Apri in Google Maps</button>
+          <button class="pu-btn" onclick="window.__s('${s.id}')">↗ Naviga con Google Maps</button>
         </div>`,
-        {maxWidth:220, autoPan:true}
+        {maxWidth:220,autoPan:true}
       );
   });
 }
-window.__s=function(i){selCard(i);if(mappa)mappa.closePopup();};
+
+window.__s = function(id){
+  const i = FILT.findIndex(s=>String(s.id)===String(id));
+  if(i>=0) selCard(FILT[i].id);
+  if(mappa) mappa.closePopup();
+};
 
 /* ══ SELEZIONE ═══════════════════════════════════════ */
-function selCard(i){
-  const s=FILT[i]; if(!s) return;
-  selId=s.id;
+function selCard(id){
+  const s = FILT.find(x=>x.id===id);
+  if(!s) return;
+  selId = id;
+
   if(view==='lista'){
     renderLista();
     setTimeout(()=>{
-      const cc=document.querySelectorAll('.card');
-      if(cc[i]) cc[i].scrollIntoView({behavior:'smooth',block:'nearest'});
+      const cards = document.querySelectorAll('#pannello-lista .card');
+      const idx   = FILT.findIndex(x=>x.id===id);
+      if(cards[idx]) cards[idx].scrollIntoView({behavior:'smooth',block:'nearest'});
     },30);
   }else{
     if(s.lat&&s.lng) mappa.setView([s.lat,s.lng],15);
     aggMarkers();
   }
-  // Apri Google Maps
+
+  toast(s.gestore+' · €'+fp(s.prezzo)+'/L');
   const url=`https://www.google.com/maps/dir/?api=1&destination=${s.lat},${s.lng}&travelmode=driving`;
-  toast(s.gestore+' · €'+fp(s.prezzo)+'/L · Apertura Maps…');
-  setTimeout(()=>window.open(url,'_blank'),1000);
+  setTimeout(()=>window.open(url,'_blank'),900);
+}
+
+/* ══ VIEW — usa show/hide, NON distrugge il DOM ══════ */
+function setView(v){
+  view = v;
+  document.querySelectorAll('.vtab').forEach(t=>t.classList.remove('on'));
+  document.getElementById('vt-'+v).classList.add('on');
+
+  if(v==='mappa'){
+    document.getElementById('pannello-lista').classList.add('hidden');
+    document.getElementById('pannello-mappa').classList.remove('hidden');
+    // Inizializza mappa se non ancora fatto
+    initMappa();
+    // Centro mappa sulla posizione corrente
+    const la=cLat||uLat||41.9, lo=cLng||uLng||12.5;
+    const z=(cLat||uLat)?13:6;
+    mappa.setView([la,lo],z);
+    // FONDAMENTALE: invalidateSize dopo show per ridisegnare correttamente
+    setTimeout(()=>{ mappa.invalidateSize(); aggMarkers(); },60);
+  }else{
+    document.getElementById('pannello-mappa').classList.add('hidden');
+    document.getElementById('pannello-lista').classList.remove('hidden');
+    renderLista();
+  }
+}
+
+/* ══ GPS ═════════════════════════════════════════════ */
+// Funzione unificata che funziona sia nel browser che in Capacitor APK
+async function richiediGPS(){
+  // 1. Prova Capacitor Geolocation (APK Android/iOS)
+  if(window.Capacitor && window.Capacitor.isNativePlatform && window.Capacitor.isNativePlatform()){
+    try{
+      const { Geolocation } = window.Capacitor.Plugins;
+      if(Geolocation){
+        // Su Capacitor richiede permesso automaticamente alla prima chiamata
+        const pos = await Geolocation.getCurrentPosition({
+          enableHighAccuracy:true,
+          timeout:10000,
+        });
+        return { lat: pos.coords.latitude, lng: pos.coords.longitude };
+      }
+    }catch(e){
+      console.warn('Capacitor GPS error:', e.code, e.message);
+      if(e.code==='LOCATION_SERVICES_NOT_ENABLED'||e.message?.includes('disabled')){
+        toast('⚠️ GPS del telefono disattivato — attivalo in Impostazioni → Posizione',5000);
+      }else if(e.code==='PERMISSION_DENIED'||e.message?.includes('denied')){
+        toast('⚠️ Permesso GPS negato — vai in Impostazioni → App → Carburanti → Permessi',5000);
+      }
+      return null;
+    }
+  }
+
+  // 2. Fallback: Web Geolocation API (browser o WebView)
+  return new Promise(resolve=>{
+    if(!navigator.geolocation){ resolve(null); return; }
+    navigator.geolocation.getCurrentPosition(
+      pos => resolve({lat:pos.coords.latitude, lng:pos.coords.longitude}),
+      err => {
+        if(err.code===1) toast('⚠️ Permesso GPS negato — abilitalo in Impostazioni → App → Carburanti → Permessi',5000);
+        else if(err.code===2) toast('⚠️ GPS non disponibile — attiva la posizione del telefono',4000);
+        else toast('⚠️ GPS lento — riprova');
+        resolve(null);
+      },
+      {enableHighAccuracy:true, timeout:10000, maximumAge:60000}
+    );
+  });
+}
+
+async function avviaGPS(){
+  // Richiede GPS immediatamente all'avvio — su Android APK mostra il dialog permessi
+  const pos = await richiediGPS();
+  if(pos){
+    uLat=pos.lat; uLng=pos.lng;
+    cLat=uLat; cLng=uLng; raggio=RAGGIO;
+    document.getElementById('btn-geo').classList.add('on');
+    document.getElementById('btn-geo').textContent='📍 '+raggio+'km';
+  }
+  carica();
+}
+
+async function geoLocate(){
+  toast('📍 Rilevamento GPS…',6000);
+  const pos = await richiediGPS();
+  if(pos){
+    uLat=pos.lat; uLng=pos.lng;
+    cLat=uLat; cLng=uLng; raggio=RAGGIO;
+    document.getElementById('btn-geo').classList.add('on');
+    document.getElementById('btn-geo').textContent='📍 '+raggio+'km';
+    document.getElementById('sinp').value='';
+    toast('✅ Posizione trovata!');
+    if(mappa && view==='mappa') mappa.setView([uLat,uLng],13);
+    tentativo=0; carica();
+  }
 }
 
 /* ══ RICERCA CITTÀ ═══════════════════════════════════ */
@@ -596,17 +684,17 @@ function mostraS(d){
   b.style.display='block';
   b.innerHTML=d.map(x=>{
     const a=x.address||{};
-    const nome=[a.city||a.town||a.village||a.municipality||x.display_name.split(',')[0], a.state||a.county].filter(Boolean).join(', ');
+    const nome=[a.city||a.town||a.village||a.municipality||x.display_name.split(',')[0],a.state||a.county].filter(Boolean).join(', ');
     return`<div class="sugg-item" onclick="selS(${x.lat},${x.lon},'${nome.replace(/'/g,"\\'")}')">📍 ${nome}</div>`;
   }).join('');
 }
 function chiudiS(){document.getElementById('suggerimenti').style.display='none';}
 function selS(lat,lon,nome){
-  cLat=parseFloat(lat); cLng=parseFloat(lon); raggio=RAGGIO_DEFAULT;
+  cLat=parseFloat(lat); cLng=parseFloat(lon); raggio=RAGGIO;
   document.getElementById('sinp').value=nome.split(',')[0];
   chiudiS();
-  document.getElementById('btn-geo').classList.remove('attivo');
-  toast('🔍 Stazioni vicino a '+nome.split(',')[0]+' ('+raggio+'km)');
+  document.getElementById('btn-geo').classList.remove('on');
+  toast('🔍 Stazioni entro '+raggio+'km da '+nome.split(',')[0]+'…');
   if(mappa&&view==='mappa') mappa.setView([cLat,cLng],13);
   tentativo=0; carica();
 }
@@ -614,8 +702,10 @@ async function cercaEnter(q){
   try{
     const r=await fetch(`${NOMINATIM}?q=${encodeURIComponent(q)}&format=json&limit=1&countrycodes=it`,{headers:{'User-Agent':'CarburantiApp/3.0'}});
     const d=await r.json();
-    if(d&&d.length){const a=d[0].address||{};selS(d[0].lat,d[0].lon,a.city||a.town||a.village||d[0].display_name.split(',')[0]);}
-    else toast('❌ Città non trovata');
+    if(d&&d.length){
+      const a=d[0].address||{};
+      selS(d[0].lat,d[0].lon,a.city||a.town||a.village||d[0].display_name.split(',')[0]);
+    }else toast('❌ Città non trovata');
   }catch(e){toast('❌ Errore nella ricerca');}
 }
 document.addEventListener('click',e=>{
@@ -629,15 +719,7 @@ function setFuel(btn){
   selId=null; tentativo=0; carica();
 }
 
-/* ══ VIEW ════════════════════════════════════════════ */
-function setView(v){
-  view=v;
-  document.querySelectorAll('.vtab').forEach(t=>t.classList.remove('on'));
-  document.getElementById('vt-'+v).classList.add('on');
-  if(v==='mappa') renderMappa(); else renderLista();
-}
-
-/* ══ AVVIO — GPS IMMEDIATO ═══════════════════════════ */
+/* ══ AVVIO ═══════════════════════════════════════════ */
 window.addEventListener('load', avviaGPS);
 </script>
 </body>
