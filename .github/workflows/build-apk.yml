@@ -28,9 +28,6 @@ jobs:
       - name: Installa dipendenze npm
         run: npm install
 
-      - name: Installa plugin Geolocation Capacitor
-        run: npm install @capacitor/geolocation
-
       - name: Aggiungi piattaforma Android
         run: |
           if [ ! -d "./android" ]; then
