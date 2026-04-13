@@ -28,6 +28,9 @@ jobs:
       - name: Installa dipendenze npm
         run: npm install
 
+      - name: Installa plugin Geolocation Capacitor
+        run: npm install @capacitor/geolocation
+
       - name: Aggiungi piattaforma Android
         run: |
           if [ ! -d "./android" ]; then
@@ -36,6 +39,16 @@ jobs:
 
       - name: Sincronizza Capacitor
         run: npx cap sync android
+
+      - name: Aggiungi permessi GPS nel manifest Android
+        run: |
+          MANIFEST="android/app/src/main/AndroidManifest.xml"
+          if ! grep -q "ACCESS_FINE_LOCATION" "$MANIFEST"; then
+            sed -i 's|<application|<uses-permission android:name="android.permission.ACCESS_FINE_LOCATION" />\n    <uses-permission android:name="android.permission.ACCESS_COARSE_LOCATION" />\n    <application|' "$MANIFEST"
+            echo "Permessi GPS aggiunti"
+          else
+            echo "Permessi GPS già presenti"
+          fi
 
       - name: Rendi eseguibile Gradle
         run: chmod +x android/gradlew
