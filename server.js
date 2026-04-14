@@ -13,6 +13,18 @@ const MIMIT_ANAGRAFICA = 'https://www.mimit.gov.it/images/exportCSV/anagrafica_i
 const CACHE_TTL = 8 * 60 * 60 * 1000;
 let CACHE = { data: null, ts: 0, loading: false, errore: null };
 
+// Gestori da escludere — nomi che non sono veri gestori
+const GESTORI_ESCLUDI = [
+  'prezzibenzina', 'gestori.prezzibenzina', 'www.', 'http', '.it', '.com',
+  'n/a', 'nd', 'n.d.', 'non disponibile', 'sconosciuto'
+];
+
+function gestoreValido(g) {
+  if (!g || g.trim() === '' || g === '—') return false;
+  const gl = g.toLowerCase();
+  return !GESTORI_ESCLUDI.some(e => gl.includes(e));
+}
+
 // ─── CORS ─────────────────────────────────────────────────────────────────────
 app.use((req, res, next) => {
   res.setHeader('Access-Control-Allow-Origin', '*');
@@ -27,54 +39,33 @@ app.use(express.static(path.join(__dirname, 'public')));
 async function scaricaCSV(url) {
   const res = await fetch(url, {
     timeout: 45000,
-    headers: {
-      'User-Agent': 'Mozilla/5.0 (compatible; CarburantiBot/2.0)',
-      'Accept': 'text/csv, text/plain, */*',
-    },
+    headers: { 'User-Agent': 'Mozilla/5.0 (compatible; CarburantiBot/3.0)' },
   });
   if (!res.ok) throw new Error(`HTTP ${res.status}`);
   return res.text();
 }
 
 // ─── PARSE CSV MIMIT ──────────────────────────────────────────────────────────
-// I CSV MIMIT hanno questo formato:
-// Riga 0: "estrazione del 2026-04-11"   ← intestazione con data, DA SALTARE
-// Riga 1: idImpianto|...|...|...        ← headers reali delle colonne
-// Riga 2+: dati
+// Il CSV MIMIT ha una riga extra in cima con la data di estrazione.
+// Cerca la riga che contiene "idImpianto" come header reale.
 function parseCSVMIMIT(testo) {
   const righe = testo.replace(/\r/g, '').split('\n').filter(r => r.trim());
   if (righe.length < 3) return [];
 
-  // Trova la riga degli headers reali (quella che contiene "idImpianto" o "idimpianto")
-  let headerIdx = -1;
+  // Trova header reale (contiene idimpianto)
+  let hi = -1;
   for (let i = 0; i < Math.min(5, righe.length); i++) {
-    const r = righe[i].toLowerCase();
-    if (r.includes('idimpianto') || r.includes('id_impianto') || r.includes('codicimpianto')) {
-      headerIdx = i;
-      break;
-    }
+    if (righe[i].toLowerCase().includes('idimpianto')) { hi = i; break; }
   }
+  if (hi === -1) hi = 1; // fallback
 
-  if (headerIdx === -1) {
-    console.log('[WARN] Header idImpianto non trovato nelle prime 5 righe, uso riga 1');
-    headerIdx = 1; // fallback: salta solo la prima riga (data)
-  }
-
-  console.log(`[INFO] Header trovato alla riga ${headerIdx}: ${righe[headerIdx].substring(0, 100)}`);
-
-  // Rileva separatore dalla riga degli headers
-  const headerRiga = righe[headerIdx];
-  const nPipe  = (headerRiga.match(/\|/g) || []).length;
-  const nSemic = (headerRiga.match(/;/g)  || []).length;
-  const sep    = nPipe >= nSemic ? '|' : ';';
-  console.log(`[INFO] Separatore rilevato: "${sep}" (pipe:${nPipe}, semicolon:${nSemic})`);
-
-  const heads = headerRiga.split(sep).map(h => h.trim().replace(/"/g, '').toLowerCase());
-  console.log(`[INFO] Headers: ${heads.join(', ')}`);
+  const headerRiga = righe[hi];
+  const sep = (headerRiga.match(/\|/g)||[]).length >= (headerRiga.match(/;/g)||[]).length ? '|' : ';';
+  const heads = headerRiga.split(sep).map(h => h.trim().replace(/"/g,'').toLowerCase());
 
   const risultati = [];
-  for (let i = headerIdx + 1; i < righe.length; i++) {
-    const vals = righe[i].split(sep).map(v => v.trim().replace(/"/g, ''));
+  for (let i = hi + 1; i < righe.length; i++) {
+    const vals = righe[i].split(sep).map(v => v.trim().replace(/"/g,''));
     if (vals.length < 2) continue;
     const o = {};
     heads.forEach((h, j) => { o[h] = vals[j] || ''; });
@@ -84,10 +75,7 @@ function parseCSVMIMIT(testo) {
 }
 
 function get(obj, ...keys) {
-  for (const k of keys) {
-    const v = obj[k];
-    if (v !== undefined && v !== '') return v;
-  }
+  for (const k of keys) { if (obj[k] !== undefined && obj[k] !== '') return obj[k]; }
   return '';
 }
 
@@ -96,7 +84,7 @@ async function aggiornaDati() {
   if (CACHE.loading) return;
   CACHE.loading = true;
   CACHE.errore  = null;
-  console.log(`\n[${new Date().toISOString()}] Scaricamento CSV MIMIT...`);
+  console.log(`[${new Date().toISOString()}] Scaricamento CSV MIMIT...`);
 
   try {
     const [tPrezzi, tAnag] = await Promise.all([
@@ -104,75 +92,52 @@ async function aggiornaDati() {
       scaricaCSV(MIMIT_ANAGRAFICA),
     ]);
 
-    console.log(`[INFO] Prezzi: ${tPrezzi.length} bytes | Anagrafica: ${tAnag.length} bytes`);
-
-    // Log prime 3 righe per debug
-    const prime3P = tPrezzi.split('\n').slice(0, 3).join(' || ');
-    const prime3A = tAnag.split('\n').slice(0, 3).join(' || ');
-    console.log(`[DEBUG] Prime righe PREZZI: ${prime3P.substring(0, 200)}`);
-    console.log(`[DEBUG] Prime righe ANAGRAFICA: ${prime3A.substring(0, 200)}`);
-
     const rowsPrezzi = parseCSVMIMIT(tPrezzi);
     const rowsAnag   = parseCSVMIMIT(tAnag);
 
-    console.log(`[INFO] Parsificati: ${rowsPrezzi.length} prezzi, ${rowsAnag.length} anagrafica`);
-    if (rowsPrezzi.length > 0) console.log('[DEBUG] Esempio prezzo:', JSON.stringify(rowsPrezzi[0]));
-    if (rowsAnag.length > 0)   console.log('[DEBUG] Esempio anagrafica:', JSON.stringify(rowsAnag[0]));
+    console.log(`[INFO] ${rowsPrezzi.length} prezzi, ${rowsAnag.length} anagrafica`);
 
-    if (rowsPrezzi.length < 100) throw new Error(`Troppo pochi prezzi: ${rowsPrezzi.length}`);
-
-    // Mappa anagrafica
     const anagMap = new Map();
     for (const r of rowsAnag) {
-      // Prova tutti i possibili nomi del campo ID
-      const id = (r['idimpianto'] || r['id_impianto'] || r['id'] || r['codicimpianto'] || '').trim();
+      const id = (r['idimpianto'] || r['id'] || '').trim();
       if (id) anagMap.set(id, r);
     }
-    console.log(`[INFO] Anagrafica mappata: ${anagMap.size} impianti`);
 
-    // Merge
     const stazioni = [];
-    let skipPrezzo = 0, skipId = 0;
-
     for (const r of rowsPrezzi) {
-      const id     = (r['idimpianto'] || r['id_impianto'] || r['id'] || r['codicimpianto'] || '').trim();
-      const pStr   = (r['prezzo'] || r['price'] || r['prezzoself'] || '').replace(',', '.');
-      const prezzo = parseFloat(pStr);
-
-      if (!id) { skipId++; continue; }
-      if (isNaN(prezzo) || prezzo < 0.3 || prezzo > 6) { skipPrezzo++; continue; }
+      const id     = (r['idimpianto'] || r['id'] || '').trim();
+      const prezzo = parseFloat((r['prezzo'] || '').replace(',', '.'));
+      if (!id || isNaN(prezzo) || prezzo < 0.3 || prezzo > 6) continue;
 
       const a   = anagMap.get(id) || {};
-      const lat = parseFloat(a['latitudine'] || a['lat'] || a['latitude'] || '0');
-      const lng = parseFloat(a['longitudine'] || a['lng'] || a['lon'] || a['longitude'] || '0');
+      const lat = parseFloat(a['latitudine'] || a['lat'] || '0');
+      const lng = parseFloat(a['longitudine'] || a['lng'] || '0');
+
+      // Prendi il gestore dal campo giusto, escludi quelli non validi
+      let gestore = a['gestore'] || a['bandiera'] || a['nome'] || '';
+
+      // Se il gestore non è valido (es. prezzibenzina.it), usa "Indipendente"
+      if (!gestoreValido(gestore)) gestore = 'Indipendente';
 
       stazioni.push({
-        id,
-        prezzo,
-        carburante: r['desccarburante'] || r['carburante'] || r['tipo'] || r['fuel'] || '',
-        isSelf:     (r['isself'] || r['self'] || r['modalita'] || '').toLowerCase() === 'true'
-                 || (r['isself'] || '') === '1',
-        dtCom:      r['dtcomu'] || r['dtcomunicazione'] || r['data'] || '',
-        gestore:    a['gestore'] || a['bandiera'] || a['nome'] || a['brand'] || '—',
-        indirizzo:  [a['indirizzo'] || a['via'] || '', a['comune'] || ''].filter(Boolean).join(', ') || '—',
-        comune:     a['comune'] || a['citta'] || '',
-        provincia:  a['provincia'] || a['prov'] || '',
+        id, prezzo,
+        carburante: r['desccarburante'] || r['carburante'] || '',
+        isSelf:     (r['isself'] || '').toLowerCase() === 'true' || r['isself'] === '1',
+        dtCom:      (r['dtcomu'] || r['data'] || '').split(' ')[0],
+        gestore,
+        indirizzo:  [a['indirizzo'] || '', a['comune'] || ''].filter(Boolean).join(', ') || '—',
+        comune:     a['comune'] || '',
+        provincia:  a['provincia'] || '',
         latitudine: isNaN(lat) ? 0 : lat,
         longitudine:isNaN(lng) ? 0 : lng,
       });
     }
 
-    console.log(`[INFO] Stazioni create: ${stazioni.length} (skip id:${skipId}, skip prezzo:${skipPrezzo})`);
-    if (stazioni.length > 0) console.log('[DEBUG] Esempio stazione:', JSON.stringify(stazioni[0]));
-
-    if (stazioni.length < 50) throw new Error(`Merge fallito: ${stazioni.length} stazioni. Verifica i log qui sopra.`);
+    if (stazioni.length < 100) throw new Error(`Solo ${stazioni.length} stazioni`);
 
     CACHE.data = stazioni;
     CACHE.ts   = Date.now();
-    console.log(`[OK] ✅ Cache aggiornata: ${stazioni.length} stazioni`);
-
-    const tipi = [...new Set(stazioni.map(s => s.carburante).filter(Boolean))].slice(0, 8);
-    console.log('[INFO] Tipi carburante:', tipi.join(', '));
+    console.log(`[OK] ${stazioni.length} stazioni in cache`);
 
   } catch (e) {
     CACHE.errore = e.message;
@@ -202,8 +167,7 @@ app.get('/health', (req, res) => {
 });
 
 app.get('/api/refresh', async (req, res) => {
-  CACHE.ts = 0;
-  CACHE.loading = false;
+  CACHE.ts = 0; CACHE.loading = false;
   await aggiornaDati();
   res.json({ ok: true, stazioni: CACHE.data?.length || 0, errore: CACHE.errore || null });
 });
@@ -221,7 +185,7 @@ app.get('/api/stazioni-con-prezzi', async (req, res) => {
   if (carburante) {
     const q = carburante.toLowerCase().trim();
     dati = dati.filter(s => s.carburante.toLowerCase().includes(q));
-    if (dati.length < 5) dati = CACHE.data; // fallback: tutti
+    if (dati.length < 5) dati = CACHE.data;
   }
 
   const uLat = parseFloat(lat), uLng = parseFloat(lng);
@@ -238,7 +202,12 @@ app.get('/api/stazioni-con-prezzi', async (req, res) => {
 
   dati = dati.slice(0, Math.min(parseInt(limit) || 300, 2000));
 
-  res.json({ ok: true, count: dati.length, aggiornatoAlle: new Date(CACHE.ts).toISOString(), fonte: 'MIMIT Open Data', data: dati });
+  res.json({
+    ok: true, count: dati.length,
+    aggiornatoAlle: new Date(CACHE.ts).toISOString(),
+    fonte: 'MIMIT Open Data',
+    data: dati,
+  });
 });
 
 app.get('/api/stats', (req, res) => {
