@@ -8,9 +8,9 @@
 <style>
 :root{
   --blu:#1565C0;--blu-bg:#E3F2FD;
-  --verde:#1B7E3B;--verde-bg:#E8F5E9;--verde2:#43A85F;
-  --arancio:#D84315;--arancio-bg:#FBE9E7;
-  --rosso:#B71C1C;--rosso-bg:#FFEBEE;
+  --verde:#1B7E3B;--verde-bg:#E8F5E9;
+  --arancio:#D84315;
+  --rosso:#B71C1C;
   --oro:#F9A825;--oro-bg:#FFF8E1;
   --grigio:#F4F4F4;--bordo:#E0E0E0;
   --testo:#1A1A1A;--muted:#6B6B6B;
@@ -19,7 +19,7 @@
 html,body{height:100%;font-family:-apple-system,BlinkMacSystemFont,'Segoe UI',sans-serif;background:var(--grigio);color:var(--testo);overflow:hidden;}
 .app{display:flex;flex-direction:column;height:100vh;}
 
-/* ── HEADER ── */
+/* HEADER */
 .hdr{background:var(--blu);color:white;padding:12px 16px 8px;display:flex;flex-direction:column;gap:7px;flex-shrink:0;}
 .hdr-top{display:flex;align-items:center;gap:10px;}
 .hdr-title{flex:1;font-size:16px;font-weight:700;}
@@ -35,13 +35,13 @@ html,body{height:100%;font-family:-apple-system,BlinkMacSystemFont,'Segoe UI',sa
 .sugg-item:last-child{border-bottom:none;}
 .sugg-item:active{background:#f0f4ff;}
 
-/* ── FUEL TABS ── */
+/* FUEL */
 .fuels{display:flex;overflow-x:auto;scrollbar-width:none;background:white;border-bottom:1px solid var(--bordo);flex-shrink:0;}
 .fuels::-webkit-scrollbar{display:none;}
 .ftab{padding:10px 14px;font-size:12px;font-weight:700;color:var(--muted);cursor:pointer;white-space:nowrap;border:none;border-bottom:3px solid transparent;background:none;flex-shrink:0;}
 .ftab.on{color:var(--blu);border-bottom-color:var(--blu);}
 
-/* ── STATS ── */
+/* STATS */
 .stats{display:grid;grid-template-columns:1fr 1fr 1fr;background:white;border-bottom:1px solid var(--bordo);flex-shrink:0;}
 .st{padding:8px 6px;text-align:center;border-right:1px solid var(--bordo);}
 .st:last-child{border-right:none;}
@@ -50,21 +50,21 @@ html,body{height:100%;font-family:-apple-system,BlinkMacSystemFont,'Segoe UI',sa
 .st-v.g{color:var(--verde)}.st-v.a{color:var(--arancio)}.st-v.b{color:var(--blu)}
 .st-s{font-size:9px;color:var(--muted);margin-top:1px;overflow:hidden;text-overflow:ellipsis;white-space:nowrap;}
 
-/* ── TOOLBAR ORDINAMENTO ── */
-.toolbar{display:flex;align-items:center;justify-content:space-between;padding:7px 12px;background:white;border-bottom:1px solid var(--bordo);flex-shrink:0;gap:8px;}
+/* TOOLBAR ORDINAMENTO */
+.toolbar{display:flex;align-items:center;padding:7px 12px;background:white;border-bottom:1px solid var(--bordo);flex-shrink:0;gap:8px;}
 .toolbar-label{font-size:11px;color:var(--muted);white-space:nowrap;flex-shrink:0;}
 .sort-pills{display:flex;gap:5px;overflow-x:auto;scrollbar-width:none;flex:1;}
 .sort-pills::-webkit-scrollbar{display:none;}
-.spill{font-size:11px;font-weight:600;padding:5px 11px;border-radius:20px;border:1.5px solid var(--bordo);background:white;color:var(--muted);cursor:pointer;white-space:nowrap;flex-shrink:0;transition:all .15s;}
+.spill{font-size:11px;font-weight:600;padding:5px 11px;border-radius:20px;border:1.5px solid var(--bordo);background:white;color:var(--muted);cursor:pointer;white-space:nowrap;flex-shrink:0;}
 .spill.on{background:var(--blu);color:white;border-color:var(--blu);}
 .spill:active{opacity:.7;}
 
-/* ── VIEW TABS ── */
+/* VIEW TABS */
 .vtabs{display:flex;background:white;border-bottom:1px solid var(--bordo);flex-shrink:0;}
 .vtab{flex:1;padding:9px;text-align:center;font-size:12px;font-weight:700;color:var(--muted);cursor:pointer;background:none;border:none;border-bottom:2px solid transparent;margin-bottom:-1px;display:flex;align-items:center;justify-content:center;gap:4px;}
 .vtab.on{color:var(--blu);border-bottom-color:var(--blu);}
 
-/* ── PANNELLI ── */
+/* PANNELLI */
 .content{flex:1;overflow:hidden;display:flex;flex-direction:column;min-height:0;position:relative;}
 #pannello-lista{position:absolute;inset:0;overflow-y:auto;-webkit-overflow-scrolling:touch;padding:8px;display:flex;flex-direction:column;gap:6px;background:var(--grigio);}
 #pannello-lista.hidden{display:none;}
@@ -72,42 +72,26 @@ html,body{height:100%;font-family:-apple-system,BlinkMacSystemFont,'Segoe UI',sa
 #pannello-mappa.hidden{display:none;}
 #map{width:100%;height:100%;}
 
-/* ── CARD STANDARD ── */
-.card{background:white;border-radius:14px;padding:12px 14px;box-shadow:0 1px 4px rgba(0,0,0,.07);cursor:pointer;border:1.5px solid transparent;position:relative;}
+/* CARD BASE */
+.card{background:white;border-radius:14px;padding:12px 14px;box-shadow:0 1px 4px rgba(0,0,0,.07);cursor:pointer;border:1.5px solid transparent;}
 .card:active{opacity:.75;}
 .card.sel{border-color:var(--blu);}
 
-/* ── CARD MIGLIOR PREZZO (numero 1) ── */
-.card.rank1{
+/* CARD MIGLIOR PREZZO — solo trofeo, niente numeri */
+.card.top1{
   border-color:var(--oro);
-  background:linear-gradient(135deg,#fffdf0 0%,#ffffff 60%);
-  box-shadow:0 3px 12px rgba(249,168,37,.2);
+  box-shadow:0 3px 12px rgba(249,168,37,.18);
 }
-.rank1-header{
-  display:flex;align-items:center;gap:8px;
-  background:linear-gradient(90deg,var(--oro),#FFB300);
-  color:white;font-size:11px;font-weight:700;
+.top1-banner{
+  display:flex;align-items:center;gap:6px;
+  background:var(--oro);color:white;
+  font-size:11px;font-weight:700;letter-spacing:.3px;
   padding:5px 14px;border-radius:10px 10px 0 0;
-  margin:-12px -14px 12px;letter-spacing:.3px;
+  margin:-12px -14px 12px;
 }
-.rank1-header .trophy{font-size:15px;}
-
-/* ── CARD RANK 2/3 ── */
-.card.rank2{border-color:#9E9E9E;}
-.card.rank3{border-color:#CD7F32;}
-.rank-badge{
-  position:absolute;top:10px;right:10px;
-  width:26px;height:26px;border-radius:50%;
-  display:flex;align-items:center;justify-content:center;
-  font-size:13px;font-weight:800;
-}
-.rb-1{background:var(--oro-bg);color:#F9A825;}
-.rb-2{background:#F5F5F5;color:#757575;}
-.rb-3{background:#FBE9E7;color:#CD7F32;}
-.rb-n{background:var(--grigio);color:var(--muted);font-size:11px;}
 
 .ctop{display:flex;align-items:center;justify-content:space-between;gap:10px;margin-bottom:7px;}
-.cinfo{flex:1;min-width:0;padding-right:30px;}
+.cinfo{flex:1;min-width:0;}
 .cgest{font-size:14px;font-weight:700;margin-bottom:2px;white-space:nowrap;overflow:hidden;text-overflow:ellipsis;}
 .caddr{font-size:11px;color:var(--muted);line-height:1.3;white-space:nowrap;overflow:hidden;text-overflow:ellipsis;}
 .cdist{font-size:11px;color:var(--blu);font-weight:600;margin-top:2px;}
@@ -122,7 +106,7 @@ html,body{height:100%;font-family:-apple-system,BlinkMacSystemFont,'Segoe UI',sa
 .b-save{background:var(--verde-bg);color:var(--verde);margin-left:auto;}
 .b-date{background:var(--grigio);color:var(--muted);}
 
-/* ── POPUP MAPPA ── */
+/* POPUP MAPPA */
 .leaflet-popup-content-wrapper{border-radius:14px!important;padding:0!important;overflow:hidden;box-shadow:0 6px 24px rgba(0,0,0,.22)!important;}
 .leaflet-popup-content{margin:0!important;width:auto!important;}
 .pu{padding:14px 16px;min-width:190px;}
@@ -132,7 +116,7 @@ html,body{height:100%;font-family:-apple-system,BlinkMacSystemFont,'Segoe UI',sa
 .pu-a{font-size:11px;color:var(--muted);line-height:1.4;margin-bottom:10px;}
 .pu-btn{width:100%;background:var(--blu);color:white;border:none;border-radius:9px;padding:9px;font-size:13px;font-weight:700;cursor:pointer;}
 
-/* ── LOADING / EMPTY ── */
+/* LOADING */
 .loading{display:flex;flex-direction:column;align-items:center;justify-content:center;flex:1;gap:14px;padding:40px;text-align:center;}
 .spin{width:34px;height:34px;border:3px solid var(--bordo);border-top-color:var(--blu);border-radius:50%;animation:sp .7s linear infinite;}
 @keyframes sp{to{transform:rotate(360deg);}}
@@ -140,11 +124,11 @@ html,body{height:100%;font-family:-apple-system,BlinkMacSystemFont,'Segoe UI',sa
 .ls{font-size:12px;color:var(--muted);line-height:1.6;}
 .btn-r{background:var(--blu);color:white;border:none;border-radius:22px;padding:11px 28px;font-size:14px;font-weight:700;cursor:pointer;}
 
-/* ── TOAST ── */
+/* TOAST */
 .toast{position:fixed;bottom:14px;left:50%;transform:translateX(-50%) translateY(80px);background:#1A1A1A;color:white;padding:9px 20px;border-radius:22px;font-size:13px;font-weight:500;z-index:99999;transition:transform .22s;pointer-events:none;box-shadow:0 4px 16px rgba(0,0,0,.3);max-width:92vw;text-align:center;}
 .toast.show{transform:translateX(-50%) translateY(0);}
 
-/* ── ERR ── */
+/* ERR */
 .errbar{background:#FFF3E0;border-bottom:1px solid #FFE0B2;padding:4px 14px;font-size:11px;color:#E65100;display:none;align-items:center;gap:5px;flex-shrink:0;}
 </style>
 </head>
@@ -176,7 +160,6 @@ html,body{height:100%;font-family:-apple-system,BlinkMacSystemFont,'Segoe UI',sa
     <button class="ftab" data-fuel="metano" onclick="setFuel(this)">💨 METANO</button>
   </div>
 
-  <!-- STATS: calcolate SOLO sui dati filtrati e reali -->
   <div class="stats">
     <div class="st">
       <div class="st-l">Prezzo minimo</div>
@@ -195,20 +178,19 @@ html,body{height:100%;font-family:-apple-system,BlinkMacSystemFont,'Segoe UI',sa
     </div>
   </div>
 
-  <!-- TOOLBAR ORDINAMENTO -->
   <div class="toolbar" id="toolbar">
     <span class="toolbar-label">Ordina:</span>
     <div class="sort-pills">
-      <button class="spill on" data-sort="prezzo-asc" onclick="setSort(this)">💰 Prezzo ↑</button>
-      <button class="spill" data-sort="prezzo-desc" onclick="setSort(this)">💰 Prezzo ↓</button>
-      <button class="spill" data-sort="distanza" onclick="setSort(this)">📍 Distanza</button>
-      <button class="spill" data-sort="gestore" onclick="setSort(this)">🏪 Gestore A-Z</button>
+      <button class="spill on" data-sort="prezzo-asc"  onclick="setSort(this)">💰 Prezzo ↑</button>
+      <button class="spill"    data-sort="prezzo-desc" onclick="setSort(this)">💰 Prezzo ↓</button>
+      <button class="spill"    data-sort="distanza"    onclick="setSort(this)">📍 Distanza</button>
+      <button class="spill"    data-sort="gestore"     onclick="setSort(this)">🏪 Gestore A-Z</button>
     </div>
   </div>
 
   <div class="vtabs">
     <button class="vtab on" id="vt-lista" onclick="setView('lista')">📋 Lista prezzi</button>
-    <button class="vtab" id="vt-mappa" onclick="setView('mappa')">🗺️ Mappa</button>
+    <button class="vtab"    id="vt-mappa" onclick="setView('mappa')">🗺️ Mappa</button>
   </div>
 
   <div class="errbar" id="errbar">⚠️ <span id="err-txt"></span></div>
@@ -237,6 +219,17 @@ const NOMINATIM = 'https://nominatim.openstreetmap.org/search';
 const RAGGIO    = 10;
 const FNOMI     = {gasolio:'Diesel',benzina:'Benzina 95',benzina98:'Benzina 98',gpl:'GPL',metano:'Metano'};
 
+// Gestori da non mostrare (URL o nomi non validi)
+const GESTORI_ESCLUDI = ['prezzibenzina','gestori.','www.','http','.it','.com'];
+function gestoreOk(g){
+  if(!g||g==='—') return false;
+  const gl=g.toLowerCase();
+  return !GESTORI_ESCLUDI.some(e=>gl.includes(e));
+}
+function nomeGestore(g){
+  return gestoreOk(g) ? g : 'Indipendente';
+}
+
 /* ══ STATO ═══════════════════════════════════════════ */
 let ALL=[], FILT=[];
 let fuel='gasolio', sortMode='prezzo-asc';
@@ -247,17 +240,17 @@ let mappa=null, mLayer=null, uMark=null;
 /* ══ MAPPA — inizializzata UNA VOLTA SOLA ════════════ */
 function initMappa(){
   if(mappa) return;
-  mappa = L.map('map',{zoomControl:true,preferCanvas:true,renderer:L.canvas({padding:0.4}),maxZoom:18})
+  mappa=L.map('map',{zoomControl:true,preferCanvas:true,renderer:L.canvas({padding:0.4}),maxZoom:18})
     .setView([41.9,12.5],6);
   L.tileLayer('https://{s}.tile.openstreetmap.org/{z}/{x}/{y}.png',{
     attribution:'© <a href="https://openstreetmap.org">OSM</a>',
     maxZoom:18,keepBuffer:2,updateWhenIdle:false,updateWhenZooming:false,
   }).addTo(mappa);
-  mLayer = L.layerGroup().addTo(mappa);
+  mLayer=L.layerGroup().addTo(mappa);
 }
 
 /* ══ UTILS ═══════════════════════════════════════════ */
-const fp = p => p ? p.toFixed(3).replace('.',',') : '—';
+const fp=p=>p?p.toFixed(3).replace('.',','):'—';
 function hav(a,b,c,d){
   const R=6371,dL=(c-a)*Math.PI/180,dl=(d-b)*Math.PI/180;
   const x=Math.sin(dL/2)**2+Math.cos(a*Math.PI/180)*Math.cos(c*Math.PI/180)*Math.sin(dl/2)**2;
@@ -271,28 +264,23 @@ function toast(m,d=2800){const e=document.getElementById('toast');e.textContent=
 function setErr(m){const b=document.getElementById('errbar');if(m){b.style.display='flex';document.getElementById('err-txt').textContent=m;}else b.style.display='none';}
 
 /* ══ MATCH CARBURANTE ════════════════════════════════ */
-function matchFuel(carburante, fuel){
+function matchFuel(carburante,fuel){
   const c=(carburante||'').toLowerCase().trim();
   if(!c) return false;
   switch(fuel){
-    case 'gasolio':
-      return (c==='gasolio'||c.includes('diesel'))&&!c.includes('spec')&&!c.includes('riscald')&&!c.includes('blue');
-    case 'benzina':
-      return (c==='benzina'||c==='benzina 95')&&!c.includes('98')&&!c.includes('spec')&&!c.includes('premium')&&!c.includes('super');
-    case 'benzina98':
-      return c.includes('98')||c.includes('premium')||c.includes('super')||c==='benzina speciale'||c.includes('v-power')||c.includes('ultimate');
-    case 'gpl':
-      return c==='gpl'||c.includes('gpl')||c.includes('liquefatt')||c.includes('autogas');
-    case 'metano':
-      return c==='metano'||c.includes('metano')||c.includes('cng')||c.includes('gnc');
+    case 'gasolio':   return (c==='gasolio'||c.includes('diesel'))&&!c.includes('spec')&&!c.includes('riscald');
+    case 'benzina':   return (c==='benzina'||c==='benzina 95')&&!c.includes('98')&&!c.includes('spec')&&!c.includes('premium')&&!c.includes('super');
+    case 'benzina98': return c.includes('98')||c.includes('premium')||c.includes('super')||c==='benzina speciale';
+    case 'gpl':       return c==='gpl'||c.includes('gpl')||c.includes('liquefatt');
+    case 'metano':    return c==='metano'||c.includes('metano')||c.includes('cng');
     default: return true;
   }
 }
 
-/* ══ CARICA DAL BACKEND ══════════════════════════════ */
+/* ══ CARICA ══════════════════════════════════════════ */
 async function carica(){
   tentativo++;
-  if(tentativo===1 && view==='lista'){
+  if(tentativo===1&&view==='lista'){
     document.getElementById('pannello-lista').innerHTML=
       `<div class="loading"><div class="spin"></div>
        <div class="lt">Caricamento prezzi…</div>
@@ -300,8 +288,8 @@ async function carica(){
   }
   try{
     const p=new URLSearchParams({limit:400});
-    const fuelServer={gasolio:'Gasolio',benzina:'Benzina',benzina98:'Benzina',gpl:'GPL',metano:'Metano'}[fuel]||fuel;
-    p.set('carburante',fuelServer);
+    const fs={gasolio:'Gasolio',benzina:'Benzina',benzina98:'Benzina',gpl:'GPL',metano:'Metano'};
+    p.set('carburante',fs[fuel]||fuel);
     if(cLat&&cLng){p.set('lat',cLat.toFixed(6));p.set('lng',cLng.toFixed(6));p.set('raggio',raggio);}
 
     const res=await fetch(`${BACKEND}/api/stazioni-con-prezzi?${p}`,{signal:AbortSignal.timeout(30000)});
@@ -318,11 +306,17 @@ async function carica(){
     if(!j.ok||!j.data?.length) throw new Error('vuoto');
 
     ALL=j.data.map((s,i)=>({
-      id:s.id||i, prezzo:parseFloat(s.prezzo)||0,
+      id:s.id||i,
+      prezzo:parseFloat(s.prezzo)||0,
       carburante:(s.carburante||'').trim(),
-      self:s.isSelf||false, dtCom:(s.dtCom||'').split(' ')[0]||'',
-      gestore:s.gestore||'—', indirizzo:s.indirizzo||'—', comune:s.comune||'',
-      lat:parseFloat(s.latitudine)||0, lng:parseFloat(s.longitudine)||0,
+      self:s.isSelf||false,
+      dtCom:(s.dtCom||'').split(' ')[0]||'',
+      // Applica filtro gestore anche lato client come sicurezza aggiuntiva
+      gestore:nomeGestore(s.gestore),
+      indirizzo:s.indirizzo||'—',
+      comune:s.comune||'',
+      lat:parseFloat(s.latitudine)||0,
+      lng:parseFloat(s.longitudine)||0,
       dist:s.distanza!=null?parseFloat(s.distanza):null,
     })).filter(s=>s.prezzo>0.1&&s.prezzo<6);
 
@@ -360,13 +354,11 @@ function usaCampione(){
   applicaFiltri();
 }
 
-/* ══ FILTRI + ORDINAMENTO ════════════════════════════ */
+/* ══ FILTRI ══════════════════════════════════════════ */
 function applicaFiltri(){
-  // 1. Filtra per tipo carburante
   let f=ALL.filter(s=>matchFuel(s.carburante,fuel));
   if(f.length<3) f=[...ALL];
 
-  // 2. Ricalcola distanze precise lato client
   if(cLat&&cLng){
     f=f.map(s=>({...s,dist:(s.lat&&s.lng)?hav(cLat,cLng,s.lat,s.lng):null}))
        .filter(s=>s.dist===null||s.dist<=raggio);
@@ -377,16 +369,10 @@ function applicaFiltri(){
     }
   }
 
-  // 3. Ordina secondo la modalità selezionata
   f=applicaSort(f);
-
   FILT=f;
-
-  // 4. Aggiorna stats con i valori REALI dei dati filtrati
   aggStats();
-
-  if(view==='lista') renderLista();
-  else aggMarkers();
+  if(view==='lista') renderLista(); else aggMarkers();
 }
 
 function applicaSort(lista){
@@ -399,83 +385,45 @@ function applicaSort(lista){
   }
 }
 
-/* ══ STATS — VALORI REALI DAI DATI FILTRATI ═════════ */
+/* ══ STATS ═══════════════════════════════════════════ */
 function aggStats(){
   const pp=FILT.map(s=>s.prezzo).filter(p=>p>0);
-  if(!pp.length){
-    ['smin','savg','scnt'].forEach(id=>document.getElementById(id).textContent='—');
-    return;
-  }
-
-  // Calcola min, media, max ESATTI dai dati effettivamente mostrati
-  const mn  = Math.min(...pp);
-  const mx  = Math.max(...pp);
-  const avg = pp.reduce((a,b)=>a+b,0)/pp.length;
-
-  document.getElementById('smin').textContent = '€'+fp(mn);
-  document.getElementById('savg').textContent = '€'+fp(avg);
-  document.getElementById('scnt').textContent = FILT.length;
-
-  // "Minimo" mostra il gestore più economico
-  const stazioneMin = FILT.find(s=>s.prezzo===mn);
-  document.getElementById('smin-w').textContent = (stazioneMin?.gestore||'—').substring(0,14);
-
-  // "Media" mostra il tipo di carburante
-  document.getElementById('sfuel').textContent = FNOMI[fuel]||fuel;
-
-  // "Stazioni" mostra il raggio o "tutta Italia"
-  document.getElementById('sraggio').textContent = cLat ? 'entro '+raggio+' km' : 'tutta Italia';
+  if(!pp.length) return;
+  const mn=Math.min(...pp),avg=pp.reduce((a,b)=>a+b,0)/pp.length;
+  document.getElementById('smin').textContent='€'+fp(mn);
+  document.getElementById('savg').textContent='€'+fp(avg);
+  document.getElementById('scnt').textContent=FILT.length;
+  document.getElementById('smin-w').textContent=(FILT.find(s=>s.prezzo===mn)?.gestore||'—').substring(0,14);
+  document.getElementById('sfuel').textContent=FNOMI[fuel]||fuel;
+  document.getElementById('sraggio').textContent=cLat?'entro '+raggio+' km':'tutta Italia';
 }
 
-/* ══ LISTA CON RANKING ═══════════════════════════════ */
+/* ══ LISTA ═══════════════════════════════════════════ */
 function renderLista(){
   const pl=document.getElementById('pannello-lista');
   if(!FILT.length){
     pl.innerHTML=`<div class="loading"><div class="lt">Nessuna stazione trovata</div>
-      <div class="ls">Prova a cercare una città o allarga il raggio</div>
+      <div class="ls">Prova a cercare una città</div>
       <button class="btn-r" onclick="raggio=50;applicaFiltri()">Allarga a 50 km</button></div>`;
     return;
   }
 
-  // Trova il prezzo minimo e massimo REALI per colorazione e badge risparmio
-  const prezzi  = FILT.map(s=>s.prezzo);
-  const prezzoMin = Math.min(...prezzi);
-  const prezzoMax = Math.max(...prezzi);
-
-  // Trova l'ID della stazione con prezzo minimo (per il trofeo)
-  // Se ordinato per prezzo desc, il minimo non è il primo — troviamolo comunque
-  const idMin = FILT.find(s=>s.prezzo===prezzoMin)?.id;
+  const prezzoMin=Math.min(...FILT.map(s=>s.prezzo));
+  const prezzoMax=Math.max(...FILT.map(s=>s.prezzo));
+  const idMin=FILT.find(s=>s.prezzo===prezzoMin)?.id;
 
   const frag=document.createDocumentFragment();
-
-  FILT.slice(0,80).forEach((s,posizione)=>{
-    const c   = colC(s.prezzo,prezzoMin,prezzoMax);
-    const isMigliore = s.id===idMin;
-    const sel = selId===s.id;
-    const risparmio = ((prezzoMax-s.prezzo)*40).toFixed(2);
-
-    // Rank numerico per posizione nella lista (non basato sul prezzo se ordinato diversamente)
-    const rankNum = posizione+1;
+  FILT.slice(0,80).forEach(s=>{
+    const c=colC(s.prezzo,prezzoMin,prezzoMax);
+    const isMigliore=s.id===idMin;
+    const sel=selId===s.id;
+    const risparmio=((prezzoMax-s.prezzo)*40).toFixed(2);
 
     const div=document.createElement('div');
-    div.className='card'+(isMigliore?' rank1':rankNum===2?' rank2':rankNum===3?' rank3':'')+(sel?' sel':'');
-
-    let headerHtml='';
-    if(isMigliore){
-      headerHtml=`<div class="rank1-header"><span class="trophy">🏆</span> MIGLIOR PREZZO DELL'AREA</div>`;
-    }
-
-    // Badge rank solo se ordinato per prezzo crescente
-    let rankBadgeHtml='';
-    if(sortMode==='prezzo-asc'){
-      const rb=rankNum===1?'rb-1':rankNum===2?'rb-2':rankNum===3?'rb-3':'rb-n';
-      const rl=rankNum===1?'🥇':rankNum===2?'🥈':rankNum===3?'🥉':rankNum;
-      rankBadgeHtml=`<div class="rank-badge ${rb}">${rl}</div>`;
-    }
+    div.className='card'+(isMigliore?' top1':'')+(sel?' sel':'');
 
     div.innerHTML=`
-      ${headerHtml}
-      ${rankBadgeHtml}
+      ${isMigliore?`<div class="top1-banner">🏆 MIGLIOR PREZZO DELL'AREA</div>`:''}
       <div class="ctop">
         <div class="cinfo">
           <div class="cgest">${s.gestore}</div>
@@ -502,7 +450,7 @@ function renderLista(){
   pl.appendChild(frag);
 }
 
-/* ══ MARKERS MAPPA ═══════════════════════════════════ */
+/* ══ MAPPA ═══════════════════════════════════════════ */
 function aggMarkers(){
   if(!mappa||!mLayer) return;
   mLayer.clearLayers();
@@ -513,13 +461,13 @@ function aggMarkers(){
   }
   const vis=FILT.filter(s=>s.lat&&s.lng&&Math.abs(s.lat)>0.5);
   if(!vis.length) return;
-  const mn=Math.min(...vis.map(s=>s.prezzo)), mx=Math.max(...vis.map(s=>s.prezzo));
+  const mn=Math.min(...vis.map(s=>s.prezzo)),mx=Math.max(...vis.map(s=>s.prezzo));
   vis.slice(0,150).forEach(s=>{
-    const c=colH(s.prezzo,mn,mx), sel=selId===s.id;
+    const c=colH(s.prezzo,mn,mx),sel=selId===s.id;
     const ico=L.divIcon({
       className:'',
       html:`<div style="background:white;border:2.5px solid ${c};color:${c};font-size:${sel?13:10}px;font-weight:800;padding:2px 5px;border-radius:6px;white-space:nowrap;box-shadow:0 2px 6px rgba(0,0,0,.2);${sel?'transform:scale(1.25);':''}">€${fp(s.prezzo)}</div>`,
-      iconSize:[52,22], iconAnchor:[26,22],
+      iconSize:[52,22],iconAnchor:[26,22],
     });
     L.marker([s.lat,s.lng],{icon:ico,zIndexOffset:sel?1000:0}).addTo(mLayer)
       .bindPopup(`<div class="pu">
@@ -541,7 +489,7 @@ function selCard(id){
   if(view==='lista'){
     renderLista();
     setTimeout(()=>{
-      const idx=FILT.findIndex(x=>x.id===s.id);
+      const idx=FILT.findIndex(x=>String(x.id)===String(id));
       const cards=document.querySelectorAll('#pannello-lista .card');
       if(cards[idx]) cards[idx].scrollIntoView({behavior:'smooth',block:'nearest'});
     },30);
@@ -550,20 +498,15 @@ function selCard(id){
     aggMarkers();
   }
   toast(s.gestore+' · €'+fp(s.prezzo)+'/L');
-  const url=`https://www.google.com/maps/dir/?api=1&destination=${s.lat},${s.lng}&travelmode=driving`;
-  setTimeout(()=>window.open(url,'_blank'),900);
+  setTimeout(()=>window.open(`https://www.google.com/maps/dir/?api=1&destination=${s.lat},${s.lng}&travelmode=driving`,'_blank'),900);
 }
 
-/* ══ SORT ════════════════════════════════════════════ */
+/* ══ ORDINAMENTO ═════════════════════════════════════ */
 function setSort(btn){
   document.querySelectorAll('.spill').forEach(b=>b.classList.remove('on'));
   btn.classList.add('on');
   sortMode=btn.dataset.sort;
-  // Se si ordina per distanza ma non c'è posizione, avvisa
-  if(sortMode==='distanza'&&!cLat&&!uLat){
-    toast('📍 Attiva il GPS o cerca una città per ordinare per distanza');
-    return;
-  }
+  if(sortMode==='distanza'&&!cLat&&!uLat){toast('📍 Attiva il GPS o cerca una città per ordinare per distanza');return;}
   applicaFiltri();
 }
 
@@ -572,14 +515,12 @@ function setView(v){
   view=v;
   document.querySelectorAll('.vtab').forEach(t=>t.classList.remove('on'));
   document.getElementById('vt-'+v).classList.add('on');
-  // Mostra/nascondi toolbar sort solo nella lista
   document.getElementById('toolbar').style.display=v==='lista'?'flex':'none';
   if(v==='mappa'){
     document.getElementById('pannello-lista').classList.add('hidden');
     document.getElementById('pannello-mappa').classList.remove('hidden');
     initMappa();
-    const la=cLat||uLat||41.9, lo=cLng||uLng||12.5, z=(cLat||uLat)?13:6;
-    mappa.setView([la,lo],z);
+    mappa.setView([cLat||uLat||41.9,cLng||uLng||12.5],(cLat||uLat)?13:6);
     setTimeout(()=>{mappa.invalidateSize();aggMarkers();},60);
   }else{
     document.getElementById('pannello-mappa').classList.add('hidden');
@@ -605,9 +546,9 @@ async function richiediGPS(){
         return {lat:pos.coords.latitude,lng:pos.coords.longitude};
       }
     }catch(e){
-      if(e.code==='LOCATION_SERVICES_NOT_ENABLED'||e.message?.includes('disabled'))
+      if(e.message?.includes('disabled')||e.code==='LOCATION_SERVICES_NOT_ENABLED')
         toast('⚠️ GPS disattivato — attivalo in Impostazioni → Posizione',5000);
-      else if(e.code==='PERMISSION_DENIED'||e.message?.includes('denied'))
+      else if(e.message?.includes('denied')||e.code==='PERMISSION_DENIED')
         toast('⚠️ Permesso GPS negato — Impostazioni → App → Carburanti → Permessi',5000);
       return null;
     }
@@ -633,10 +574,6 @@ async function avviaGPS(){
     uLat=pos.lat;uLng=pos.lng;cLat=uLat;cLng=uLng;raggio=RAGGIO;
     document.getElementById('btn-geo').classList.add('on');
     document.getElementById('btn-geo').textContent='📍 '+raggio+'km';
-    // Se ordinato per distanza, è già corretto
-    if(sortMode==='prezzo-asc'){
-      // default ok
-    }
   }
   carica();
 }
@@ -657,31 +594,14 @@ async function geoLocate(){
 
 /* ══ RICERCA CITTÀ ═══════════════════════════════════ */
 let _st;
-function onInput(){
-  clearTimeout(_st);
-  const q=document.getElementById('sinp').value.trim();
-  if(q.length<2){chiudiS();return;}
-  _st=setTimeout(()=>cercaS(q),300);
-}
-function onKey(e){
-  if(e.key==='Enter'){chiudiS();const q=document.getElementById('sinp').value.trim();if(q)cercaEnter(q);}
-  if(e.key==='Escape') chiudiS();
-}
-async function cercaS(q){
-  try{
-    const r=await fetch(`${NOMINATIM}?q=${encodeURIComponent(q)}&format=json&limit=5&countrycodes=it&accept-language=it&addressdetails=1`,{headers:{'User-Agent':'CarburantiApp/3.0'}});
-    mostraS(await r.json());
-  }catch(e){chiudiS();}
-}
+function onInput(){clearTimeout(_st);const q=document.getElementById('sinp').value.trim();if(q.length<2){chiudiS();return;}_st=setTimeout(()=>cercaS(q),300);}
+function onKey(e){if(e.key==='Enter'){chiudiS();const q=document.getElementById('sinp').value.trim();if(q)cercaEnter(q);}if(e.key==='Escape')chiudiS();}
+async function cercaS(q){try{const r=await fetch(`${NOMINATIM}?q=${encodeURIComponent(q)}&format=json&limit=5&countrycodes=it&accept-language=it&addressdetails=1`,{headers:{'User-Agent':'CarburantiApp/3.0'}});mostraS(await r.json());}catch(e){chiudiS();}}
 function mostraS(d){
   const b=document.getElementById('suggerimenti');
   if(!d||!d.length){chiudiS();return;}
   b.style.display='block';
-  b.innerHTML=d.map(x=>{
-    const a=x.address||{};
-    const nome=[a.city||a.town||a.village||a.municipality||x.display_name.split(',')[0],a.state||a.county].filter(Boolean).join(', ');
-    return`<div class="sugg-item" onclick="selS(${x.lat},${x.lon},'${nome.replace(/'/g,"\\'")}')">📍 ${nome}</div>`;
-  }).join('');
+  b.innerHTML=d.map(x=>{const a=x.address||{};const nome=[a.city||a.town||a.village||a.municipality||x.display_name.split(',')[0],a.state||a.county].filter(Boolean).join(', ');return`<div class="sugg-item" onclick="selS(${x.lat},${x.lon},'${nome.replace(/'/g,"\\'")}')">📍 ${nome}</div>`;}).join('');
 }
 function chiudiS(){document.getElementById('suggerimenti').style.display='none';}
 function selS(lat,lon,nome){
@@ -693,18 +613,11 @@ function selS(lat,lon,nome){
   if(mappa&&view==='mappa') mappa.setView([cLat,cLng],13);
   tentativo=0; carica();
 }
-async function cercaEnter(q){
-  try{
-    const r=await fetch(`${NOMINATIM}?q=${encodeURIComponent(q)}&format=json&limit=1&countrycodes=it`,{headers:{'User-Agent':'CarburantiApp/3.0'}});
-    const d=await r.json();
-    if(d&&d.length){const a=d[0].address||{};selS(d[0].lat,d[0].lon,a.city||a.town||a.village||d[0].display_name.split(',')[0]);}
-    else toast('❌ Città non trovata');
-  }catch(e){toast('❌ Errore ricerca');}
-}
+async function cercaEnter(q){try{const r=await fetch(`${NOMINATIM}?q=${encodeURIComponent(q)}&format=json&limit=1&countrycodes=it`,{headers:{'User-Agent':'CarburantiApp/3.0'}});const d=await r.json();if(d&&d.length){const a=d[0].address||{};selS(d[0].lat,d[0].lon,a.city||a.town||a.village||d[0].display_name.split(',')[0]);}else toast('❌ Città non trovata');}catch(e){toast('❌ Errore ricerca');}}
 document.addEventListener('click',e=>{if(!document.getElementById('search-row').contains(e.target))chiudiS();});
 
 /* ══ AVVIO ═══════════════════════════════════════════ */
-window.addEventListener('load', avviaGPS);
+window.addEventListener('load',avviaGPS);
 </script>
 </body>
 </html>
