@@ -13,16 +13,24 @@ const MIMIT_ANAGRAFICA = 'https://www.mimit.gov.it/images/exportCSV/anagrafica_i
 const CACHE_TTL = 8 * 60 * 60 * 1000;
 let CACHE = { data: null, ts: 0, loading: false, errore: null };
 
-// Gestori da escludere — nomi che non sono veri gestori
-const GESTORI_ESCLUDI = [
-  'prezzibenzina', 'gestori.prezzibenzina', 'www.', 'http', '.it', '.com',
-  'n/a', 'nd', 'n.d.', 'non disponibile', 'sconosciuto'
-];
+// ─── PULIZIA NOME GESTORE ─────────────────────────────────────────────────────
+// Rimuove qualsiasi cosa non sia un nome reale di gestore
+function pulisciGestore(raw) {
+  if (!raw) return 'Indipendente';
+  const s = raw.trim();
+  if (s === '') return 'Indipendente';
 
-function gestoreValido(g) {
-  if (!g || g.trim() === '' || g === '—') return false;
-  const gl = g.toLowerCase();
-  return !GESTORI_ESCLUDI.some(e => gl.includes(e));
+  // Scarta se contiene punti di dominio, slash, www, http, @
+  if (/\.(it|com|net|org|eu|info)\b/i.test(s)) return 'Indipendente';
+  if (/https?:\/\//i.test(s)) return 'Indipendente';
+  if (/^www\./i.test(s)) return 'Indipendente';
+  if (s.includes('/') || s.includes('@')) return 'Indipendente';
+
+  // Scarta valori generici non informativi
+  const generici = ['n/a','nd','n.d.','non disponibile','sconosciuto','null','none','---','--','-'];
+  if (generici.includes(s.toLowerCase())) return 'Indipendente';
+
+  return s;
 }
 
 // ─── CORS ─────────────────────────────────────────────────────────────────────
@@ -46,18 +54,16 @@ async function scaricaCSV(url) {
 }
 
 // ─── PARSE CSV MIMIT ──────────────────────────────────────────────────────────
-// Il CSV MIMIT ha una riga extra in cima con la data di estrazione.
-// Cerca la riga che contiene "idImpianto" come header reale.
 function parseCSVMIMIT(testo) {
   const righe = testo.replace(/\r/g, '').split('\n').filter(r => r.trim());
   if (righe.length < 3) return [];
 
-  // Trova header reale (contiene idimpianto)
+  // Cerca riga header reale (contiene "idimpianto")
   let hi = -1;
   for (let i = 0; i < Math.min(5, righe.length); i++) {
     if (righe[i].toLowerCase().includes('idimpianto')) { hi = i; break; }
   }
-  if (hi === -1) hi = 1; // fallback
+  if (hi === -1) hi = 1;
 
   const headerRiga = righe[hi];
   const sep = (headerRiga.match(/\|/g)||[]).length >= (headerRiga.match(/;/g)||[]).length ? '|' : ';';
@@ -97,37 +103,54 @@ async function aggiornaDati() {
 
     console.log(`[INFO] ${rowsPrezzi.length} prezzi, ${rowsAnag.length} anagrafica`);
 
+    // Log esempio dei campi disponibili in anagrafica
+    if (rowsAnag.length > 0) {
+      console.log('[DEBUG] Campi anagrafica:', Object.keys(rowsAnag[0]).join(', '));
+      console.log('[DEBUG] Esempio riga:', JSON.stringify(rowsAnag[0]));
+    }
+
     const anagMap = new Map();
     for (const r of rowsAnag) {
-      const id = (r['idimpianto'] || r['id'] || '').trim();
+      const id = (get(r, 'idimpianto', 'id') || '').trim();
       if (id) anagMap.set(id, r);
     }
 
     const stazioni = [];
+    let scartatiGestore = 0;
+
     for (const r of rowsPrezzi) {
-      const id     = (r['idimpianto'] || r['id'] || '').trim();
-      const prezzo = parseFloat((r['prezzo'] || '').replace(',', '.'));
+      const id     = (get(r, 'idimpianto', 'id') || '').trim();
+      const prezzo = parseFloat((get(r, 'prezzo') || '').replace(',', '.'));
       if (!id || isNaN(prezzo) || prezzo < 0.3 || prezzo > 6) continue;
 
       const a   = anagMap.get(id) || {};
-      const lat = parseFloat(a['latitudine'] || a['lat'] || '0');
-      const lng = parseFloat(a['longitudine'] || a['lng'] || '0');
+      const lat = parseFloat(get(a, 'latitudine', 'lat') || '0');
+      const lng = parseFloat(get(a, 'longitudine', 'lng') || '0');
 
-      // Prendi il gestore dal campo giusto, escludi quelli non validi
-      let gestore = a['gestore'] || a['bandiera'] || a['nome'] || '';
+      // Prova tutti i campi possibili per il nome gestore
+      // Nel CSV MIMIT il campo si chiama "Gestore" (con maiuscola)
+      const gestoreRaw = get(a,
+        'gestore',      // campo principale
+        'bandiera',     // campo alternativo (a volte contiene URL!)
+        'insegna',
+        'nome',
+        'brand'
+      );
 
-      // Se il gestore non è valido (es. prezzibenzina.it), usa "Indipendente"
-      if (!gestoreValido(gestore)) gestore = 'Indipendente';
+      const gestore = pulisciGestore(gestoreRaw);
+      if (gestoreRaw && gestore === 'Indipendente' && gestoreRaw !== 'Indipendente') {
+        scartatiGestore++;
+      }
 
       stazioni.push({
         id, prezzo,
-        carburante: r['desccarburante'] || r['carburante'] || '',
-        isSelf:     (r['isself'] || '').toLowerCase() === 'true' || r['isself'] === '1',
-        dtCom:      (r['dtcomu'] || r['data'] || '').split(' ')[0],
+        carburante: get(r, 'desccarburante', 'carburante'),
+        isSelf:     (get(r, 'isself') || '').toLowerCase() === 'true' || get(r, 'isself') === '1',
+        dtCom:      (get(r, 'dtcomu', 'data') || '').split(' ')[0],
         gestore,
-        indirizzo:  [a['indirizzo'] || '', a['comune'] || ''].filter(Boolean).join(', ') || '—',
-        comune:     a['comune'] || '',
-        provincia:  a['provincia'] || '',
+        indirizzo:  [get(a, 'indirizzo'), get(a, 'comune')].filter(Boolean).join(', ') || '—',
+        comune:     get(a, 'comune'),
+        provincia:  get(a, 'provincia'),
         latitudine: isNaN(lat) ? 0 : lat,
         longitudine:isNaN(lng) ? 0 : lng,
       });
@@ -135,9 +158,10 @@ async function aggiornaDati() {
 
     if (stazioni.length < 100) throw new Error(`Solo ${stazioni.length} stazioni`);
 
+    console.log(`[OK] ${stazioni.length} stazioni (${scartatiGestore} gestori URL sostituiti con "Indipendente")`);
+
     CACHE.data = stazioni;
     CACHE.ts   = Date.now();
-    console.log(`[OK] ${stazioni.length} stazioni in cache`);
 
   } catch (e) {
     CACHE.errore = e.message;
@@ -170,6 +194,20 @@ app.get('/api/refresh', async (req, res) => {
   CACHE.ts = 0; CACHE.loading = false;
   await aggiornaDati();
   res.json({ ok: true, stazioni: CACHE.data?.length || 0, errore: CACHE.errore || null });
+});
+
+// Endpoint di debug — mostra i gestori più comuni
+app.get('/api/debug/gestori', (req, res) => {
+  if (!CACHE.data) return res.json({ ok: false, error: 'Cache vuota' });
+  const mappa = {};
+  for (const s of CACHE.data) {
+    mappa[s.gestore] = (mappa[s.gestore] || 0) + 1;
+  }
+  const top = Object.entries(mappa)
+    .sort((a, b) => b[1] - a[1])
+    .slice(0, 30)
+    .map(([g, n]) => ({ gestore: g, count: n }));
+  res.json({ ok: true, top });
 });
 
 app.get('/api/stazioni-con-prezzi', async (req, res) => {
