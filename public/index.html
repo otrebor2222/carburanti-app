@@ -279,18 +279,31 @@ function matchFuel(carburante,fuel){
 
 /* ══ CARICA ══════════════════════════════════════════ */
 async function carica(){
+  // Senza posizione non carichiamo nulla — impedisce stazioni casuali da tutta Italia
+  if(!cLat||!cLng){
+    document.getElementById('pannello-lista').innerHTML=
+      `<div class="loading">
+        <div style="font-size:36px;margin-bottom:8px">📍</div>
+        <div class="lt">Dove sei?</div>
+        <div class="ls">Attiva il GPS oppure cerca la tua città per vedere i prezzi vicino a te</div>
+       </div>`;
+    return;
+  }
   tentativo++;
   if(tentativo===1&&view==='lista'){
     document.getElementById('pannello-lista').innerHTML=
       `<div class="loading"><div class="spin"></div>
        <div class="lt">Caricamento prezzi…</div>
-       <div class="ls">${cLat?'Stazioni entro '+raggio+' km':'Dati MIMIT aggiornati'}</div></div>`;
+       <div class="ls">Stazioni entro ${raggio} km da te</div></div>`;
   }
   try{
     const p=new URLSearchParams({limit:400});
     const fs={gasolio:'Gasolio',benzina:'Benzina',benzina98:'Benzina',gpl:'GPL',metano:'Metano'};
     p.set('carburante',fs[fuel]||fuel);
-    if(cLat&&cLng){p.set('lat',cLat.toFixed(6));p.set('lng',cLng.toFixed(6));p.set('raggio',raggio);}
+    // lat/lng SEMPRE obbligatori — il server li richiede
+    p.set('lat',cLat.toFixed(6));
+    p.set('lng',cLng.toFixed(6));
+    p.set('raggio',raggio);
 
     const res=await fetch(`${BACKEND}/api/stazioni-con-prezzi?${p}`,{signal:AbortSignal.timeout(30000)});
     if(res.status===503){
