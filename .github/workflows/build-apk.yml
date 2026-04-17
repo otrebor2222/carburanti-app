@@ -44,33 +44,64 @@ jobs:
             sed -i 's|<application|<uses-permission android:name="android.permission.ACCESS_FINE_LOCATION" />\n    <uses-permission android:name="android.permission.ACCESS_COARSE_LOCATION" />\n    <application|' "$MANIFEST"
           fi
 
-      - name: Genera icone app da resources/icon.png
+      - name: Sostituisci icona app
         run: |
-          sudo apt-get install -y imagemagick
+          sudo apt-get install -y imagemagick -q
           ICON="resources/icon.png"
-          if [ -f "$ICON" ]; then
-            echo "Generazione icone Android..."
-            MIPMAP="android/app/src/main/res"
-            mkdir -p "$MIPMAP/mipmap-mdpi"
-            mkdir -p "$MIPMAP/mipmap-hdpi"
-            mkdir -p "$MIPMAP/mipmap-xhdpi"
-            mkdir -p "$MIPMAP/mipmap-xxhdpi"
-            mkdir -p "$MIPMAP/mipmap-xxxhdpi"
-            convert "$ICON" -resize 48x48   "$MIPMAP/mipmap-mdpi/ic_launcher.png"
-            convert "$ICON" -resize 72x72   "$MIPMAP/mipmap-hdpi/ic_launcher.png"
-            convert "$ICON" -resize 96x96   "$MIPMAP/mipmap-xhdpi/ic_launcher.png"
-            convert "$ICON" -resize 144x144 "$MIPMAP/mipmap-xxhdpi/ic_launcher.png"
-            convert "$ICON" -resize 192x192 "$MIPMAP/mipmap-xxxhdpi/ic_launcher.png"
-            # Icona rotonda
-            convert "$ICON" -resize 48x48   "$MIPMAP/mipmap-mdpi/ic_launcher_round.png"
-            convert "$ICON" -resize 72x72   "$MIPMAP/mipmap-hdpi/ic_launcher_round.png"
-            convert "$ICON" -resize 96x96   "$MIPMAP/mipmap-xhdpi/ic_launcher_round.png"
-            convert "$ICON" -resize 144x144 "$MIPMAP/mipmap-xxhdpi/ic_launcher_round.png"
-            convert "$ICON" -resize 192x192 "$MIPMAP/mipmap-xxxhdpi/ic_launcher_round.png"
-            echo "Icone generate con successo"
-          else
-            echo "Nessun file resources/icon.png trovato, uso icona default"
+          if [ ! -f "$ICON" ]; then
+            echo "ERRORE: resources/icon.png non trovato"
+            exit 1
           fi
+          echo "Icona trovata, genero tutte le dimensioni..."
+          R="android/app/src/main/res"
+
+          # Genera tutte le dimensioni standard
+          convert "$ICON" -resize 48x48     "$R/mipmap-mdpi/ic_launcher.png"
+          convert "$ICON" -resize 48x48     "$R/mipmap-mdpi/ic_launcher_round.png"
+          convert "$ICON" -resize 48x48     "$R/mipmap-mdpi/ic_launcher_foreground.png"
+          convert "$ICON" -resize 72x72     "$R/mipmap-hdpi/ic_launcher.png"
+          convert "$ICON" -resize 72x72     "$R/mipmap-hdpi/ic_launcher_round.png"
+          convert "$ICON" -resize 72x72     "$R/mipmap-hdpi/ic_launcher_foreground.png"
+          convert "$ICON" -resize 96x96     "$R/mipmap-xhdpi/ic_launcher.png"
+          convert "$ICON" -resize 96x96     "$R/mipmap-xhdpi/ic_launcher_round.png"
+          convert "$ICON" -resize 96x96     "$R/mipmap-xhdpi/ic_launcher_foreground.png"
+          convert "$ICON" -resize 144x144   "$R/mipmap-xxhdpi/ic_launcher.png"
+          convert "$ICON" -resize 144x144   "$R/mipmap-xxhdpi/ic_launcher_round.png"
+          convert "$ICON" -resize 144x144   "$R/mipmap-xxhdpi/ic_launcher_foreground.png"
+          convert "$ICON" -resize 192x192   "$R/mipmap-xxxhdpi/ic_launcher.png"
+          convert "$ICON" -resize 192x192   "$R/mipmap-xxxhdpi/ic_launcher_round.png"
+          convert "$ICON" -resize 192x192   "$R/mipmap-xxxhdpi/ic_launcher_foreground.png"
+
+          # Rimuovi le cartelle anydpi-v26 che usano XML con layer
+          # e sostituisci con icone statiche semplici
+          rm -rf "$R/mipmap-anydpi-v26"
+
+          # Ricrea mipmap-anydpi-v26 con XML che punta direttamente all'icona PNG
+          mkdir -p "$R/mipmap-anydpi-v26"
+          cat > "$R/mipmap-anydpi-v26/ic_launcher.xml" << 'XMLEOF'
+<?xml version="1.0" encoding="utf-8"?>
+<adaptive-icon xmlns:android="http://schemas.android.com/apk/res/android">
+    <background android:drawable="@mipmap/ic_launcher_background"/>
+    <foreground android:drawable="@mipmap/ic_launcher_foreground"/>
+</adaptive-icon>
+XMLEOF
+          cat > "$R/mipmap-anydpi-v26/ic_launcher_round.xml" << 'XMLEOF'
+<?xml version="1.0" encoding="utf-8"?>
+<adaptive-icon xmlns:android="http://schemas.android.com/apk/res/android">
+    <background android:drawable="@mipmap/ic_launcher_background"/>
+    <foreground android:drawable="@mipmap/ic_launcher_foreground"/>
+</adaptive-icon>
+XMLEOF
+
+          # Genera anche il background (sfondo bianco)
+          convert -size 192x192 xc:white "$R/mipmap-xxxhdpi/ic_launcher_background.png"
+          convert -size 144x144 xc:white "$R/mipmap-xxhdpi/ic_launcher_background.png"
+          convert -size 96x96   xc:white "$R/mipmap-xhdpi/ic_launcher_background.png"
+          convert -size 72x72   xc:white "$R/mipmap-hdpi/ic_launcher_background.png"
+          convert -size 48x48   xc:white "$R/mipmap-mdpi/ic_launcher_background.png"
+
+          echo "Tutte le icone sostituite con successo!"
+          ls -la "$R/mipmap-xxxhdpi/"
 
       - name: Rendi eseguibile Gradle
         run: chmod +x android/gradlew
