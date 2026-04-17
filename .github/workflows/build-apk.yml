@@ -42,9 +42,34 @@ jobs:
           MANIFEST="android/app/src/main/AndroidManifest.xml"
           if ! grep -q "ACCESS_FINE_LOCATION" "$MANIFEST"; then
             sed -i 's|<application|<uses-permission android:name="android.permission.ACCESS_FINE_LOCATION" />\n    <uses-permission android:name="android.permission.ACCESS_COARSE_LOCATION" />\n    <application|' "$MANIFEST"
-            echo "Permessi GPS aggiunti"
+          fi
+
+      - name: Genera icone app da resources/icon.png
+        run: |
+          sudo apt-get install -y imagemagick
+          ICON="resources/icon.png"
+          if [ -f "$ICON" ]; then
+            echo "Generazione icone Android..."
+            MIPMAP="android/app/src/main/res"
+            mkdir -p "$MIPMAP/mipmap-mdpi"
+            mkdir -p "$MIPMAP/mipmap-hdpi"
+            mkdir -p "$MIPMAP/mipmap-xhdpi"
+            mkdir -p "$MIPMAP/mipmap-xxhdpi"
+            mkdir -p "$MIPMAP/mipmap-xxxhdpi"
+            convert "$ICON" -resize 48x48   "$MIPMAP/mipmap-mdpi/ic_launcher.png"
+            convert "$ICON" -resize 72x72   "$MIPMAP/mipmap-hdpi/ic_launcher.png"
+            convert "$ICON" -resize 96x96   "$MIPMAP/mipmap-xhdpi/ic_launcher.png"
+            convert "$ICON" -resize 144x144 "$MIPMAP/mipmap-xxhdpi/ic_launcher.png"
+            convert "$ICON" -resize 192x192 "$MIPMAP/mipmap-xxxhdpi/ic_launcher.png"
+            # Icona rotonda
+            convert "$ICON" -resize 48x48   "$MIPMAP/mipmap-mdpi/ic_launcher_round.png"
+            convert "$ICON" -resize 72x72   "$MIPMAP/mipmap-hdpi/ic_launcher_round.png"
+            convert "$ICON" -resize 96x96   "$MIPMAP/mipmap-xhdpi/ic_launcher_round.png"
+            convert "$ICON" -resize 144x144 "$MIPMAP/mipmap-xxhdpi/ic_launcher_round.png"
+            convert "$ICON" -resize 192x192 "$MIPMAP/mipmap-xxxhdpi/ic_launcher_round.png"
+            echo "Icone generate con successo"
           else
-            echo "Permessi GPS già presenti"
+            echo "Nessun file resources/icon.png trovato, uso icona default"
           fi
 
       - name: Rendi eseguibile Gradle
