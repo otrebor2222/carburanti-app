@@ -7,7 +7,7 @@ on:
 
 jobs:
   build:
-    name: Build APK
+    name: Build APK e AAB
     runs-on: ubuntu-latest
 
     steps:
@@ -50,10 +50,9 @@ jobs:
           ICON="resources/icon.png"
           R="android/app/src/main/res"
           if [ ! -f "$ICON" ]; then
-            echo "Nessuna icona in resources/icon.png, uso default"
+            echo "Nessuna icona trovata, uso default"
             exit 0
           fi
-          echo "Genero icone da $ICON..."
           convert "$ICON" -resize 48x48   "$R/mipmap-mdpi/ic_launcher.png"
           convert "$ICON" -resize 48x48   "$R/mipmap-mdpi/ic_launcher_round.png"
           convert "$ICON" -resize 48x48   "$R/mipmap-mdpi/ic_launcher_foreground.png"
@@ -83,10 +82,14 @@ jobs:
       - name: Rendi eseguibile Gradle
         run: chmod +x android/gradlew
 
-   - name: Build APK debug e AAB release
+      - name: Build APK debug
         run: |
           cd android
           ./gradlew assembleDebug
+
+      - name: Build AAB release
+        run: |
+          cd android
           ./gradlew bundleRelease
 
       - name: Carica APK debug
