@@ -37,6 +37,20 @@ jobs:
       - name: Sincronizza Capacitor
         run: npx cap sync android
 
+      - name: Aggiorna targetSdkVersion a 35
+        run: |
+          GRADLE="android/app/build.gradle"
+          sed -i 's/targetSdkVersion 33/targetSdkVersion 35/' "$GRADLE"
+          sed -i 's/targetSdkVersion 34/targetSdkVersion 35/' "$GRADLE"
+          sed -i 's/targetSdk 33/targetSdk 35/' "$GRADLE"
+          sed -i 's/targetSdk 34/targetSdk 35/' "$GRADLE"
+          sed -i 's/compileSdkVersion 33/compileSdkVersion 35/' "$GRADLE"
+          sed -i 's/compileSdkVersion 34/compileSdkVersion 35/' "$GRADLE"
+          sed -i 's/compileSdk 33/compileSdk 35/' "$GRADLE"
+          sed -i 's/compileSdk 34/compileSdk 35/' "$GRADLE"
+          echo "SDK aggiornato:"
+          grep -E "targetSdk|compileSdk" "$GRADLE"
+
       - name: Aggiungi permessi GPS
         run: |
           MANIFEST="android/app/src/main/AndroidManifest.xml"
@@ -101,14 +115,13 @@ jobs:
                   release {
                       signingConfig signingConfigs.release
                       minifyEnabled false
-                      proguardFiles getDefaultProguardFile('proguard-android.txt'), 'proguard-rules.pro'
                   }
               }
           }
           ENDGRADLE
-            echo "Configurazione firma aggiunta"
+            echo "Firma configurata"
           else
-            echo "Firma già configurata"
+            echo "Firma già presente"
           fi
 
       - name: Rendi eseguibile Gradle
