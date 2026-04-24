@@ -7,7 +7,7 @@ on:
 
 jobs:
   build:
-    name: Build APK e AAB
+    name: Build APK e AAB firmato
     runs-on: ubuntu-latest
 
     steps:
@@ -77,7 +77,39 @@ jobs:
           mkdir -p "$R/mipmap-anydpi-v26"
           printf '%s\n' '<?xml version="1.0" encoding="utf-8"?>' '<adaptive-icon xmlns:android="http://schemas.android.com/apk/res/android">' '    <background android:drawable="@mipmap/ic_launcher_background"/>' '    <foreground android:drawable="@mipmap/ic_launcher_foreground"/>' '</adaptive-icon>' > "$R/mipmap-anydpi-v26/ic_launcher.xml"
           cp "$R/mipmap-anydpi-v26/ic_launcher.xml" "$R/mipmap-anydpi-v26/ic_launcher_round.xml"
-          echo "Icone sostituite con successo"
+          echo "Icone sostituite"
+
+      - name: Decodifica keystore
+        run: |
+          echo "${{ secrets.KEYSTORE_BASE64 }}" | base64 --decode > android/app/upload-key.keystore
+
+      - name: Configura firma in build.gradle
+        run: |
+          GRADLE="android/app/build.gradle"
+          if ! grep -q "signingConfigs" "$GRADLE"; then
+            cat >> "$GRADLE" << 'ENDGRADLE'
+          android {
+              signingConfigs {
+                  release {
+                      storeFile file("upload-key.keystore")
+                      storePassword System.getenv("KEYSTORE_PASSWORD")
+                      keyAlias System.getenv("KEY_ALIAS")
+                      keyPassword System.getenv("KEYSTORE_PASSWORD")
+                  }
+              }
+              buildTypes {
+                  release {
+                      signingConfig signingConfigs.release
+                      minifyEnabled false
+                      proguardFiles getDefaultProguardFile('proguard-android.txt'), 'proguard-rules.pro'
+                  }
+              }
+          }
+          ENDGRADLE
+            echo "Configurazione firma aggiunta"
+          else
+            echo "Firma già configurata"
+          fi
 
       - name: Rendi eseguibile Gradle
         run: chmod +x android/gradlew
@@ -87,7 +119,10 @@ jobs:
           cd android
           ./gradlew assembleDebug
 
-      - name: Build AAB release
+      - name: Build AAB release firmato
+        env:
+          KEYSTORE_PASSWORD: ${{ secrets.KEYSTORE_PASSWORD }}
+          KEY_ALIAS: ${{ secrets.KEY_ALIAS }}
         run: |
           cd android
           ./gradlew bundleRelease
@@ -99,7 +134,7 @@ jobs:
           path: android/app/build/outputs/apk/debug/app-debug.apk
           retention-days: 30
 
-      - name: Carica AAB release
+      - name: Carica AAB release firmato
         uses: actions/upload-artifact@v4
         with:
           name: carburanti-release-aab
