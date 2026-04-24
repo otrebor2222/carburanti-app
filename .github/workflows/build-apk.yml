@@ -37,19 +37,38 @@ jobs:
       - name: Sincronizza Capacitor
         run: npx cap sync android
 
-      - name: Aggiorna targetSdkVersion a 35
+      - name: Forza targetSdkVersion 35 con Python
         run: |
-          GRADLE="android/app/build.gradle"
-          sed -i 's/targetSdkVersion 33/targetSdkVersion 35/' "$GRADLE"
-          sed -i 's/targetSdkVersion 34/targetSdkVersion 35/' "$GRADLE"
-          sed -i 's/targetSdk 33/targetSdk 35/' "$GRADLE"
-          sed -i 's/targetSdk 34/targetSdk 35/' "$GRADLE"
-          sed -i 's/compileSdkVersion 33/compileSdkVersion 35/' "$GRADLE"
-          sed -i 's/compileSdkVersion 34/compileSdkVersion 35/' "$GRADLE"
-          sed -i 's/compileSdk 33/compileSdk 35/' "$GRADLE"
-          sed -i 's/compileSdk 34/compileSdk 35/' "$GRADLE"
-          echo "SDK aggiornato:"
-          grep -E "targetSdk|compileSdk" "$GRADLE"
+          python3 << 'PYEOF'
+          import re
+
+          files = [
+            'android/app/build.gradle',
+            'android/build.gradle',
+          ]
+
+          for path in files:
+            try:
+              with open(path, 'r') as f:
+                content = f.read()
+              original = content
+              content = re.sub(r'targetSdkVersion\s+\d+', 'targetSdkVersion 35', content)
+              content = re.sub(r'targetSdk\s*=?\s*\d+', 'targetSdk = 35', content)
+              content = re.sub(r'compileSdkVersion\s+\d+', 'compileSdkVersion 35', content)
+              content = re.sub(r'compileSdk\s*=?\s*\d+', 'compileSdk = 35', content)
+              if content != original:
+                with open(path, 'w') as f:
+                  f.write(content)
+                print(f"Aggiornato: {path}")
+              else:
+                print(f"Nessuna modifica: {path}")
+              # Mostra i valori trovati
+              for line in content.splitlines():
+                if any(k in line for k in ['targetSdk','compileSdk']):
+                  print(f"  -> {line.strip()}")
+            except FileNotFoundError:
+              print(f"File non trovato: {path}")
+          PYEOF
 
       - name: Aggiungi permessi GPS
         run: |
