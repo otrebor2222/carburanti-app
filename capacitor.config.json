@@ -1,5 +1,5 @@
 {
-  "appId": "it.otrebor2222.carburanti",
+  "appId": "prezzi.carburanti",
   "appName": "Prezzi Carburanti",
   "webDir": "public",
   "bundledWebRuntime": false,
