@@ -37,37 +37,40 @@ jobs:
       - name: Sincronizza Capacitor
         run: npx cap sync android
 
-      - name: Forza targetSdkVersion 35 con Python
+      - name: Forza SDK 35 DOPO cap sync
         run: |
-          python3 << 'PYEOF'
-          import re
+          python3 - << 'PYEOF'
+          import re, os
 
-          files = [
+          targets = [
             'android/app/build.gradle',
             'android/build.gradle',
+            'android/variables.gradle',
           ]
 
-          for path in files:
-            try:
-              with open(path, 'r') as f:
-                content = f.read()
-              original = content
-              content = re.sub(r'targetSdkVersion\s+\d+', 'targetSdkVersion 35', content)
-              content = re.sub(r'targetSdk\s*=?\s*\d+', 'targetSdk = 35', content)
-              content = re.sub(r'compileSdkVersion\s+\d+', 'compileSdkVersion 35', content)
-              content = re.sub(r'compileSdk\s*=?\s*\d+', 'compileSdk = 35', content)
-              if content != original:
-                with open(path, 'w') as f:
-                  f.write(content)
-                print(f"Aggiornato: {path}")
-              else:
-                print(f"Nessuna modifica: {path}")
-              # Mostra i valori trovati
-              for line in content.splitlines():
-                if any(k in line for k in ['targetSdk','compileSdk']):
-                  print(f"  -> {line.strip()}")
-            except FileNotFoundError:
-              print(f"File non trovato: {path}")
+          for path in targets:
+            if not os.path.exists(path):
+              print(f"Non trovato: {path}")
+              continue
+            with open(path, 'r') as f:
+              content = f.read()
+            original = content
+            # Sostituisce qualsiasi numero dopo targetSdkVersion, compileSdkVersion, ecc.
+            content = re.sub(r'(targetSdkVersion\s+)\d+', r'\g<1>35', content)
+            content = re.sub(r'(targetSdk\s*=\s*)\d+', r'\g<1>35', content)
+            content = re.sub(r'(compileSdkVersion\s+)\d+', r'\g<1>35', content)
+            content = re.sub(r'(compileSdk\s*=\s*)\d+', r'\g<1>35', content)
+            content = re.sub(r'(targetSdk\s+)\d+', r'\g<1>35', content)
+            content = re.sub(r'(compileSdk\s+)\d+', r'\g<1>35', content)
+            if content != original:
+              with open(path, 'w') as f:
+                f.write(content)
+              print(f"Aggiornato SDK a 35: {path}")
+            else:
+              print(f"Nessun SDK trovato in: {path}")
+            for line in content.splitlines():
+              if any(k in line for k in ['targetSdk', 'compileSdk']):
+                print(f"  {line.strip()}")
           PYEOF
 
       - name: Aggiungi permessi GPS
